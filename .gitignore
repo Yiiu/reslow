@@ -50,7 +50,6 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
-
 # Yarn Integrity file
 .yarn-integrity
 
@@ -61,3 +60,6 @@ typings/
 .next
 
 build/
+
+
+package.json.lerna_backup

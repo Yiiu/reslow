@@ -137,7 +137,7 @@ export default (
     }
   });
   if (appConfig.configureWebpack) {
-    webpackConfig = merge(appConfig.configureWebpack, (webpackConfig as any));
+    webpackConfig = merge(appConfig.configureWebpack, (webpackConfig as any)) as any;
   }
   if (appConfig.modify) {
     webpackConfig = appConfig.modify<typeof webpackConfig>(webpackConfig, { ...config, ...appConfig }, dotenv);
