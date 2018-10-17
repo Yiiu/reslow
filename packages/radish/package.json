@@ -182,6 +182,5 @@
   "browser": {
     "fs": false,
     "child_process": false
-  },
-  "gitHead": "31e26db20e4abc9715e6e6b4c4e3c17ef1908824"
+  }
 }
