@@ -8,9 +8,9 @@ import paths from '../../paths';
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
-import { IConfig } from '../index';
+import { IPluginsConfig } from '../index';
 
-export default (webpackConfig: any, { isServer, dev, ssr, clientIndexJs }: IConfig, dotenv: any) => {
+export default (webpackConfig: any, { isServer, dev, ssr, clientIndexJs }: IPluginsConfig, dotenv: any) => {
   const hostPort = parseInt(dotenv.raw.PORT, 10) + (ssr ? 1 : 0);
   if (!isServer) {
     if (dev) {

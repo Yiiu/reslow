@@ -30,38 +30,38 @@ export interface IAppConfig {
   port?: string;
   host?: string;
   modify?: IAppConfigPlugin;
+  serverIndexJs?: string;
+  clientIndexJs?: string;
 }
 
 export interface IConfig {
   dev: boolean;
   isServer: boolean;
   ssr?: boolean;
-  serverIndexJs?: string;
-  clientIndexJs?: string;
 }
+
+export type IPluginsConfig = IConfig & IAppConfig
 
 export default (
   baseConfig: IConfig,
-  {
-    plugins = [],
-    configureWebpack,
-    modify,
-  }: IAppConfig
+  appConfig: IAppConfig
 ) => {
   const config = {
     dev: false,
     isServer: false,
     ssr: !!process.env.SSR,
-    serverIndexJs: paths.appServerIndexJs,
-    clientIndexJs: paths.appClientIndexJs,
     ...baseConfig
   };
+  appConfig = {
+    plugins: [],
+    ...appConfig
+  }
   const webpackMode = config.dev ? 'development' : 'production';
   const publicPath = '/public/';
   const dotenv = getEnv(config.isServer, {
-    plugins,
-    configureWebpack,
-    modify,
+    plugins: appConfig.plugins,
+    configureWebpack: appConfig.configureWebpack,
+    modify: appConfig.modify,
   }, '');
   let webpackConfig = {
     mode: webpackMode,
@@ -129,16 +129,18 @@ export default (
       })
     ].filter(Boolean)
   };
-  plugins.push(clientPlugins);
-  plugins.push(serverPlugins);
-  plugins.forEach(plugin => {
+  appConfig.plugins.push(clientPlugins);
+  appConfig.plugins.push(serverPlugins);
+  appConfig.plugins.forEach(plugin => {
     if (typeof(plugin) === 'function') {
-      webpackConfig = plugin(webpackConfig, config, dotenv);
+      webpackConfig = plugin(webpackConfig, { ...config, ...appConfig }, dotenv);
     }
   });
-  merge(configureWebpack, (webpackConfig as any));
-  if (modify) {
-    webpackConfig = modify<typeof webpackConfig>(webpackConfig, config, dotenv);
+  if (appConfig.configureWebpack) {
+    webpackConfig = merge(appConfig.configureWebpack, (webpackConfig as any));
+  }
+  if (appConfig.modify) {
+    webpackConfig = appConfig.modify<typeof webpackConfig>(webpackConfig, { ...config, ...appConfig }, dotenv);
   }
   return webpackConfig;
 };

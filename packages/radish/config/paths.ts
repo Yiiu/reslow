@@ -10,7 +10,7 @@ export default {
   appSrc: resolveApp('src'),
   appPackageJson: resolveApp('package.json'),
   appClientIndexJs: resolveApp('src/app/index.tsx'),
-  appServerIndexJs: resolveApp('src/server.tsx'),
+  appServerIndexJs: resolveApp('src/server.ts'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appNodeModules: resolveApp('node_modules'),

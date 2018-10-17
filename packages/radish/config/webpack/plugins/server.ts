@@ -2,11 +2,11 @@
 import * as StartServerPlugin from 'start-server-webpack-plugin';
 // import paths from '../../paths';
 
-import { IConfig } from '../index';
+import { IPluginsConfig } from '../index';
 
 export default (
   webpackConfig: any,
-  { isServer, dev, serverIndexJs }: IConfig
+  { isServer, dev, serverIndexJs }: IPluginsConfig
 ) => {
   if (isServer) {
     if (dev) {

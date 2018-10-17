@@ -1,6 +1,6 @@
 {
-  "name": "@radish/server",
-  "version": "0.0.5",
+  "name": "radish-server",
+  "version": "0.0.6",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
@@ -24,16 +24,12 @@
     "add": "^2.0.6",
     "autodll-webpack-plugin": "^0.4.2",
     "autoprefixer": "^9.1.5",
-    "axios": "^0.18.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "chalk": "^2.4.1",
-    "child_process": "^1.0.2",
-    "clean-webpack-plugin": "^0.1.19",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.3",
     "cross-env": "^5.2.0",
     "css-loader": "0.28.7",
-    "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
     "express": "^4.16.4",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -49,10 +45,6 @@
     "less-loader": "^4.1.0",
     "memory-fs": "^0.4.1",
     "mini-css-extract-plugin": "^0.4.3",
-    "mobx": "^5.0.3",
-    "mobx-react": "^5.2.3",
-    "mobx-react-router": "^4.0.4",
-    "nodemon": "^1.18.4",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "^3.0.0",
@@ -73,7 +65,6 @@
     "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "0.6.2",
     "webpack": "^4.20.2",
-    "webpack-dev-server": "^3.1.8",
     "webpack-hot-middleware": "^2.24.3",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.1.4",
@@ -182,5 +173,6 @@
   "browser": {
     "fs": false,
     "child_process": false
-  }
+  },
+  "gitHead": "41528d06734c3d53cffc78ce5d86ece04e37a115"
 }

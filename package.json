@@ -1,5 +1,5 @@
 {
-  "name": "root",
+  "name": "radish",
   "devDependencies": {
     "lerna": "^3.4.3"
   }
