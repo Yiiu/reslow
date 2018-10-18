@@ -157,5 +157,6 @@
   "browser": {
     "fs": false,
     "child_process": false
-  }
+  },
+  "gitHead": "d2ea893f4a74a4b8e7f13de57ae5a7477b541b7c"
 }
