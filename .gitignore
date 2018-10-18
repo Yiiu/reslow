@@ -63,4 +63,6 @@ build/
 
 __server
 
+yarn.lock
+
 package.json.lerna_backup
