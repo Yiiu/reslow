@@ -48,6 +48,7 @@ const main = async () => {
   if (process.env.SSR) {
     webpackConfig.push(serverConfig);
   }
+  // console.log(clientConfig);
   const multiCompiler = webpack(webpackConfig as any) as any;
 
   const devMiddleware = WebpackDevMiddleware(multiCompiler, {

@@ -1,4 +1,4 @@
 module.exports = {
-  // serverIndexJs: './src/server.ts',
-  // clientIndexJs: './src/app/index.tsx',
+  serverIndexJs: './src/server.ts',
+  clientIndexJs: './src/app/index.tsx',
 }

@@ -26,10 +26,7 @@ export const getEnv = (isServer: boolean, options: IAppConfig, publicUrl: string
         BUILD_TARGET: isServer ? 'server' : 'client',
         CLIENT_PUBLIC_PATH: process.env.CLIENT_PUBLIC_PATH,
         PUBLIC_URL: publicUrl,
-        APP_PUBLIC_DIR:
-          process.env.NODE_ENV === 'production'
-            ? paths.appBuildPublic
-            : paths.appPublic,
+        APP_PUBLIC_DIR: paths.appBuildPublic
       }
     );
   process.env = {
