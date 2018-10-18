@@ -40,7 +40,7 @@ export interface IConfig {
   ssr?: boolean;
 }
 
-export type IPluginsConfig = IConfig & IAppConfig
+export type IPluginsConfig = IConfig & IAppConfig;
 
 export default (
   baseConfig: IConfig,
@@ -54,8 +54,10 @@ export default (
   };
   appConfig = {
     plugins: [],
+    clientIndexJs: paths.appClientIndexJs,
+    serverIndexJs: paths.appServerIndexJs,
     ...appConfig
-  }
+  };
   const webpackMode = config.dev ? 'development' : 'production';
   const publicPath = '/public/';
   const dotenv = getEnv(config.isServer, {
