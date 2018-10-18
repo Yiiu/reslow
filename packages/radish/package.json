@@ -65,6 +65,7 @@
     "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "0.6.2",
     "webpack": "^4.20.2",
+    "webpack-dev-middleware": "^3.4.0",
     "webpack-hot-middleware": "^2.24.3",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.1.4",
@@ -74,7 +75,8 @@
     "yarn": "^1.9.4"
   },
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "dev": "tsc"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",

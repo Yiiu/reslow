@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'development';
 
 import * as historyApiFallback from 'connect-history-api-fallback';
 import * as express from 'express';
