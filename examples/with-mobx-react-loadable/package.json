@@ -99,7 +99,7 @@
     "tslint": "^5.7.0",
     "tslint-config-prettier": "^1.10.0",
     "tslint-loader": "^3.6.0",
-    "tslint-react": "^3.2.0",
+    "tslint-react": "^3.6.0",
     "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "0.6.2",
     "webpack": "^4.20.2",
@@ -115,7 +115,8 @@
   },
   "scripts": {
     "start": "radish start",
-    "start:server": "cross-env SSR=true radish start"
+    "start:server": "cross-env SSR=true radish start",
+    "ddd": "radish --"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",

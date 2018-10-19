@@ -1,5 +1,5 @@
+import { IAppConfig } from '../scripts/index';
 import paths from './paths';
-import { IAppConfig } from './webpack';
 
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {

@@ -8,12 +8,30 @@ import paths from '../../paths';
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
-import { IPluginsConfig } from '../index';
+import { AppPluginConfig } from '../../../scripts/index';
+import webpack from '..';
 
-export default (webpackConfig: any, { isServer, dev, ssr, clientIndexJs }: IPluginsConfig, dotenv: any) => {
-  const hostPort = parseInt(dotenv.raw.PORT, 10) + (ssr ? 1 : 0);
+export default (
+  webpackConfig: any,
+  {
+    isServer,
+    dev,
+    ssr,
+    port,
+    host,
+    clientIndexJs
+  }: AppPluginConfig,
+  dotenv: any
+) => {
+  const hostPort = parseInt(port, 10) + (ssr ? 1 : 0);
   if (!isServer) {
+    webpackConfig.entry = [
+      clientIndexJs
+    ];
     if (dev) {
+      webpackConfig.entry.unshift(
+        `webpack-hot-middleware/client?reload=true&path=http://${host}:${hostPort}/__webpack_hmr`
+      );
       webpackConfig.devServer = {
         compress: true,
         host: dotenv.raw.HOST,
@@ -28,7 +46,7 @@ export default (webpackConfig: any, { isServer, dev, ssr, clientIndexJs }: IPlug
         },
       };
     }
-    if (!process.env.SSR) {
+    if (!ssr) {
       webpackConfig.output.publicPath = '/';
       webpackConfig.plugins.unshift(
         new HtmlWebpackPlugin({
@@ -63,10 +81,6 @@ export default (webpackConfig: any, { isServer, dev, ssr, clientIndexJs }: IPlug
         from: paths.appPublic
       }])
     );
-    webpackConfig.entry = [
-      `webpack-hot-middleware/client?reload=true&path=http://${dotenv.raw.HOST}:${hostPort}/__webpack_hmr`,
-      clientIndexJs
-    ];
   }
   return webpackConfig;
 };

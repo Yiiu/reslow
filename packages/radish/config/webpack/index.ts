@@ -20,65 +20,34 @@ import paths from '../paths';
 import scriptLoader from './loader/script';
 import styleLoader from './loader/style';
 
-export type IAppConfigPlugin = <T>(webpackConfig: T, config: IConfig, dotenv: any) => any;
+import { IAppConfig } from '../../scripts/index';
 
-export interface IAppConfig {
-  configureWebpack?: any;
-  plugins?: IAppConfigPlugin[];
-  hotPort?: string;
-  hotHost?: string;
-  port?: string;
-  host?: string;
-  modify?: IAppConfigPlugin;
-  serverIndexJs?: string;
-  clientIndexJs?: string;
-}
-
-export interface IConfig {
-  dev: boolean;
-  isServer: boolean;
-  ssr?: boolean;
-}
-
-export type IPluginsConfig = IConfig & IAppConfig;
-
-export default (
-  baseConfig: IConfig,
-  appConfig: IAppConfig
-) => {
-  const config = {
-    dev: false,
-    isServer: false,
-    ssr: !!process.env.SSR,
-    ...baseConfig
-  };
-  appConfig = {
+export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
+  const config: IAppConfig = {
     plugins: [],
     clientIndexJs: paths.appClientIndexJs,
     serverIndexJs: paths.appServerIndexJs,
     ...appConfig
   };
-  const webpackMode = config.dev ? 'development' : 'production';
+
+  const webpackMode = dev ? 'development' : 'production';
   const publicPath = '/public/';
-  const dotenv = getEnv(config.isServer, {
-    plugins: appConfig.plugins,
-    configureWebpack: appConfig.configureWebpack,
-    modify: appConfig.modify,
-  }, '');
+  const dotenv = getEnv(isServer, config, '');
+
   let webpackConfig = {
     mode: webpackMode,
     devtool: 'source-map',
-    name: config.isServer ? 'server' : 'client',
-    target: config.isServer ? 'node' : 'web',
+    name: isServer ? 'server' : 'client',
+    target: isServer ? 'node' : 'web',
     cache: true,
     output: {
-      path: path.join(paths.appBuildSrc, config.isServer ? 'server' : ''),
-      filename: config.isServer ? 'server.js' : 'static/chunks/app.js',
+      path: path.join(paths.appBuildSrc, isServer ? 'server' : ''),
+      filename: isServer ? 'server.js' : 'static/chunks/app.js',
       publicPath,
-      libraryTarget: config.isServer ? 'commonjs2' : 'jsonp',
+      libraryTarget: isServer ? 'commonjs2' : 'jsonp',
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
-      chunkFilename: config.isServer ? '[name].[contenthash].js' : 'static/chunks/[name].[contenthash].js',
+      chunkFilename: isServer ? '[name].[contenthash].js' : 'static/chunks/[name].[contenthash].js',
     },
     // performance: {
     //   hints: false
@@ -102,8 +71,8 @@ export default (
           loader: 'tslint-loader',
           enforce: 'pre'
         },
-        styleLoader({ isServer: config.isServer }),
-        scriptLoader({ isServer: config.isServer }),
+        styleLoader({ isServer }),
+        scriptLoader({ isServer }),
         {
           exclude: [/\.(js|jsx|mjs|tsx?)$/, /\.html$/, /\.json$/, /\.css|less$/],
           loader: require.resolve('file-loader'),
@@ -118,12 +87,12 @@ export default (
       new webpack.DefinePlugin(dotenv.stringified),
       new webpack.NamedModulesPlugin(),
       new WebpackBar({
-        name: config.isServer ? 'server' : 'client'
+        name: isServer ? 'server' : 'client'
       }),
-      config.dev && new FriendlyErrorsWebpackPlugin(),
-      config.dev && new webpack.HotModuleReplacementPlugin(),
-      config.dev && new CaseSensitivePathPlugin(),
-      config.dev && !!process.env.SSR && new WriteFilePlugin({
+      dev && new FriendlyErrorsWebpackPlugin(),
+      dev && new webpack.HotModuleReplacementPlugin(),
+      dev && new CaseSensitivePathPlugin(),
+      dev && config.ssr && new WriteFilePlugin({
         exitOnErrors: false,
         log: false,
         // required not to cache removed files
@@ -131,18 +100,23 @@ export default (
       })
     ].filter(Boolean)
   };
-  appConfig.plugins.push(clientPlugins);
-  appConfig.plugins.push(serverPlugins);
-  appConfig.plugins.forEach(plugin => {
+  config.plugins.push(clientPlugins);
+  config.plugins.push(serverPlugins);
+  config.plugins.forEach(plugin => {
     if (typeof(plugin) === 'function') {
-      webpackConfig = plugin(webpackConfig, { ...config, ...appConfig }, dotenv);
+      webpackConfig = plugin(
+        webpackConfig,
+        { ...config, dev, isServer },
+        dotenv
+      );
     }
   });
-  if (appConfig.configureWebpack) {
-    webpackConfig = merge(appConfig.configureWebpack, (webpackConfig as any)) as any;
+  if (config.configureWebpack) {
+    webpackConfig = merge(config.configureWebpack, (webpackConfig as any)) as any;
   }
-  if (appConfig.modify) {
-    webpackConfig = appConfig.modify<typeof webpackConfig>(webpackConfig, { ...config, ...appConfig }, dotenv);
+
+  if (config.modify) {
+    webpackConfig = config.modify<typeof webpackConfig>(webpackConfig, { ...config, dev, isServer }, dotenv);
   }
   return webpackConfig;
 };

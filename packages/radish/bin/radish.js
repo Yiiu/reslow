@@ -1,58 +1,43 @@
 #!/usr/bin/env node
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
 
 'use strict';
+const program = require('commander');
 
-process.on('unhandledRejection', err => {
-  throw err;
-});
+const Service = require('../build/scripts').default;
 
-const spawn = require('react-dev-utils/crossSpawn');
-const args = process.argv.slice(2);
 
-const scriptIndex = args.findIndex(
-  x => x === 'build' || x === 'eject' || x === 'start' || x === 'test'
-);
-const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
-const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
+program
+  .version('0.1.0')
+  .option('-C, --chdir <path>', 'change the working directory')
+  .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
+  .option('-T, --no-tests', 'ignore test hook');
 
-switch (script) {
-  case 'build':
-  case 'eject':
-  case 'start':
-  case 'test': {
-    const result = spawn.sync(
-      'node',
-      nodeArgs
-        .concat(require.resolve('../build/scripts/' + script))
-        .concat(args.slice(scriptIndex + 1)),
-      { stdio: 'inherit' }
-    );
-    if (result.signal) {
-      if (result.signal === 'SIGKILL') {
-        console.log(
-          'The build failed because the process exited too early. ' +
-            'This probably means the system ran out of memory or someone called ' +
-            '`kill -9` on the process.'
-        );
-      } else if (result.signal === 'SIGTERM') {
-        console.log(
-          'The build failed because the process exited too early. ' +
-            'Someone might have called `kill` or `killall`, or the system could ' +
-            'be shutting down.'
-        );
-      }
-      process.exit(1);
-    }
-    process.exit(result.status);
-    break;
-  }
-  default:
-    console.log('Unknown script "' + script + '".');
-    break;
-}
+program
+  .command('start')
+  .description('run dev server')
+  .option("-m, --mode <mode>", "Which start mode to use")
+  .option("-s, --ssr", "Use ssr")
+  .action(async ({
+    ssr = false,
+    mode
+  }) => {
+    const service = new Service({ ssr, mode });
+    await service.initConfig()
+    service.start()
+  });
+
+program
+  .command('build')
+  .description('run build')
+  .option("-m, --mode <mode>", "Which start mode to use")
+  .option("-s, --ssr", "Use ssr")
+  .action(async ({
+    ssr = false,
+    mode
+  }) => {
+    const service = new Service({ ssr, mode });
+    await service.initConfig()
+    service.build()
+  });
+
+program.parse(process.argv);
