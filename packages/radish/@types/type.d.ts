@@ -1,0 +1,1 @@
+type GreetingLike = string | (() => string) | MyGreeter;

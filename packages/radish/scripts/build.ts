@@ -4,7 +4,9 @@ import chalk from 'chalk';
 import * as fs from 'fs-extra';
 import * as webpack from 'webpack';
 import paths from '../config/paths';
-import webpackConfigs, { IAppConfig } from '../config/webpack/index';
+import webpackConfigs from '../config/webpack/index';
+
+import { IAppConfig } from './index';
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
@@ -19,10 +21,10 @@ const measureFileSizesBeforeBuild =
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
-const main = async () => {
+export default async (appConfig: IAppConfig) => {
   const fileSizes = await measureFileSizesBeforeBuild(paths.appBuild);
   fs.emptyDirSync(paths.appBuild);
-  build(fileSizes)
+  build(fileSizes, appConfig)
     .then(({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
@@ -57,25 +59,9 @@ const main = async () => {
     });
 };
 
-const build = async (previousFileSizes) => {
-  let config: IAppConfig = {};
-  if (await fs.existsSync(paths.appConfig)) {
-    try {
-      config = require(paths.appConfig);
-    } catch (e) {
-      clearConsole();
-      console.error('Invalid razzle.config.js file.', e);
-      process.exit(1);
-    }
-  }
-  const clientConfig = webpackConfigs({
-      dev: false,
-      isServer: false
-    }, config) as any;
-  const serverConfig = webpackConfigs({
-      dev: false,
-      isServer: true
-    }, config) as any;
+const build = async (previousFileSizes, config: IAppConfig) => {
+  const clientConfig = webpackConfigs(false, false, config);
+  const serverConfig = webpackConfigs(false, true, config);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
   return new Promise((resolve, reject) => {
@@ -94,12 +80,12 @@ const build = async (previousFileSizes) => {
           stats.toJson({ all: false, warnings: true, errors: true })
         );
       }
-      if (process.env.SSR) {
+      if (config.ssr) {
         serverMultiCompiler.run((serverErr, serverStats) => {
           let serverMessages;
-          if (err) {
-            if (!err.message) {
-              return reject(err);
+          if (serverErr) {
+            if (!serverErr.message) {
+              return reject(serverErr);
             }
             serverMessages = formatWebpackMessages({
               errors: [serverErr.message],
@@ -121,5 +107,3 @@ const build = async (previousFileSizes) => {
     });
   });
 };
-
-main();
