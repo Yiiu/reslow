@@ -1,6 +1,6 @@
 {
   "name": "radish-server",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
@@ -50,7 +50,7 @@
     "minimist": "^1.2.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
-    "radish-server": "^0.0.18",
+    "radish-server": "^0.0.19",
     "react": "^16.5.2",
     "react-dev-utils": "^6.0.5",
     "react-dom": "^16.5.2",
