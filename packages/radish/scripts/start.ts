@@ -1,5 +1,4 @@
 process.env.NODE_ENV = 'development';
-
 import * as historyApiFallback from 'connect-history-api-fallback';
 import * as express from 'express';
 import * as fs from 'fs-extra';
@@ -48,7 +47,6 @@ const main = async () => {
   if (process.env.SSR) {
     webpackConfig.push(serverConfig);
   }
-  // console.log(clientConfig);
   const multiCompiler = webpack(webpackConfig as any) as any;
 
   const devMiddleware = WebpackDevMiddleware(multiCompiler, {
