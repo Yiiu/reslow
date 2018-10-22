@@ -103,6 +103,16 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
         { ...config, dev, isServer },
         dotenv
       );
+    } else if (typeof(plugin) === 'string') {
+      const radishPlugin = require(`radish-plugin-${plugin}`);
+      if (!radishPlugin) {
+        throw new Error(`Unable to find '${plugin}`);
+      }
+      webpackConfig = radishPlugin(
+        webpackConfig,
+        { ...config, dev, isServer },
+        dotenv
+      );
     }
   });
   if (config.configureWebpack) {

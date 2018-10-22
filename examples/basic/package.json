@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "radish start",
+    "start": "radish start -s",
     "start:server": "cross-env SSR=true radish start"
   },
   "author": "",
@@ -16,7 +16,8 @@
     "@types/react-dom": "^16.0.9",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
-    "radish-server": "^0.0.16",
+    "radish-plugin-tslint": "^0.0.20",
+    "radish-server": "^0.0.20",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-hot-loader": "^4.3.11",
