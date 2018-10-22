@@ -9,7 +9,6 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
 import { AppPluginConfig } from '../../../scripts/index';
-import webpack from '..';
 
 export default (
   webpackConfig: any,
@@ -23,7 +22,7 @@ export default (
   }: AppPluginConfig,
   dotenv: any
 ) => {
-  const hostPort = parseInt(port, 10) + (ssr ? 1 : 0);
+  const hostPort = parseInt(port + '', 10) + (ssr ? 1 : 0);
   if (!isServer) {
     webpackConfig.entry = [
       clientIndexJs

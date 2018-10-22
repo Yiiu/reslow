@@ -114,8 +114,8 @@
     "yarn": "^1.9.4"
   },
   "scripts": {
-    "start": "radish start",
-    "start:server": "cross-env SSR=true radish start",
+    "start": "radish start -s -o",
+    "start:server": "radish start",
     "ddd": "radish --"
   },
   "devDependencies": {

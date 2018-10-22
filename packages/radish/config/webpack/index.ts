@@ -65,12 +65,6 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
     },
     module: {
       rules: [
-        {
-          test: /\.tsx?$/,
-          exclude: /node_modules/,
-          loader: 'tslint-loader',
-          enforce: 'pre'
-        },
         styleLoader({ isServer }),
         scriptLoader({ isServer }),
         {
@@ -100,9 +94,9 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
       })
     ].filter(Boolean)
   };
-  config.plugins.push(clientPlugins);
-  config.plugins.push(serverPlugins);
-  config.plugins.forEach(plugin => {
+  config.plugins!.push(clientPlugins);
+  config.plugins!.push(serverPlugins);
+  config.plugins!.forEach(plugin => {
     if (typeof(plugin) === 'function') {
       webpackConfig = plugin(
         webpackConfig,

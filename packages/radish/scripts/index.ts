@@ -16,6 +16,7 @@ export type IAppConfigPlugin = <T>(webpackConfig: T, config: AppPluginConfig, do
 export interface IServiceOptions {
   ssr?: boolean;
   mode?: string;
+  open?: boolean;
 }
 
 export interface IAppConfig extends IServiceOptions {

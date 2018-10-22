@@ -3,9 +3,5 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "."
-  },
-  "include":[
-    "scripts",
-    "config"
-  ]
+  }
 }

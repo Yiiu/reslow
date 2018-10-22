@@ -6,7 +6,7 @@ export default ({
   isServer = false
 }: IScriptLoaderConfig) => {
   return {
-    test: /\.tsx?$/,
+    test: /\.(js|mjs|jsx|ts|tsx)$/,
     exclude: /node_modules/,
     use: [
       {

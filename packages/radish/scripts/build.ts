@@ -25,7 +25,7 @@ export default async (appConfig: IAppConfig) => {
   const fileSizes = await measureFileSizesBeforeBuild(paths.appBuild);
   fs.emptyDirSync(paths.appBuild);
   build(fileSizes, appConfig)
-    .then(({ stats, previousFileSizes, warnings }) => {
+    .then(({ warnings }) => {
       if (warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
@@ -59,7 +59,7 @@ export default async (appConfig: IAppConfig) => {
     });
 };
 
-const build = async (previousFileSizes, config: IAppConfig) => {
+const build = async (previousFileSizes, config: IAppConfig): Promise<any> => {
   const clientConfig = webpackConfigs(false, false, config);
   const serverConfig = webpackConfigs(false, true, config);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
