@@ -104,7 +104,7 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
         dotenv
       );
     } else if (typeof(plugin) === 'string') {
-      const radishPlugin = require(`radish-plugin-${plugin}`);
+      const radishPlugin = require(`radish-plugin-${plugin}`).default;
       if (!radishPlugin) {
         throw new Error(`Unable to find '${plugin}`);
       }
