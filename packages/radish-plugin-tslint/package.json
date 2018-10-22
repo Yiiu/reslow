@@ -1,6 +1,6 @@
 {
   "name": "radish-plugin-tslint",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
   "license": "MIT",
