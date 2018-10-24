@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 
 import App from '@containers';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 import '@styles/index.less';
 
@@ -38,7 +38,6 @@ export const render = (Component: typeof App) => {
     }
   })();
   let hydrate: ReactDOM.Renderer;
-  console.log(process.env);
   if (process.env.SSR === undefined) {
     hydrate = ReactDOM.render;
   } else {
@@ -72,5 +71,9 @@ if (moduleWithHotReload.hot) {
 }
 
 render(App);
-
-registerServiceWorker();
+(() => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+})();
+// registerServiceWorker();

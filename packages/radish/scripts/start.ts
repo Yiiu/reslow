@@ -1,9 +1,11 @@
 process.env.NODE_ENV = 'development';
+
 import * as historyApiFallback from 'connect-history-api-fallback';
 import * as express from 'express';
 import * as path from 'path';
 import * as webpack from 'webpack';
 import * as WebpackDevMiddleware from 'webpack-dev-middleware';
+
 import webpackConfigs from '../config/webpack/index';
 
 import { IAppConfig } from './index';
@@ -41,8 +43,8 @@ export default async (config: IAppConfig) => {
         stats => {}
       );
     }
-    serverListen();
   });
+
   const devMiddleware = WebpackDevMiddleware(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     logLevel: 'silent',
@@ -52,4 +54,5 @@ export default async (config: IAppConfig) => {
   app.use(historyApiFallback());
   app.use(devMiddleware);
   app.use(express.static(DIST_DIR));
+  serverListen();
 };

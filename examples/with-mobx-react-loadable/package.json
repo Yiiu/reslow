@@ -74,7 +74,7 @@
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "^3.0.0",
     "promise": "8.0.1",
-    "radish-plugin-tslint": "0.0.20",
+    "radish-plugin-tslint": "^0.0.22",
     "raf": "3.4.0",
     "react": "^16.5.2",
     "react-dev-utils": "^6.0.5",
@@ -115,8 +115,9 @@
     "yarn": "^1.9.4"
   },
   "scripts": {
-    "start": "radish start -s -o",
+    "start": "radish start -s",
     "start:server": "radish start",
+    "build:server": "radish build -s",
     "ddd": "radish --"
   },
   "devDependencies": {

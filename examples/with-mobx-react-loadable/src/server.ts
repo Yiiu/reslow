@@ -2,10 +2,9 @@
 import * as fs from 'fs';
 
 import * as express from 'express';
+import * as path from 'path';
 import * as Loadable from 'react-loadable';
 import * as favicon from 'serve-favicon';
-
-import * as path from 'path';
 
 let serverRender = require('./serverRender').default;
 
@@ -41,6 +40,10 @@ Loadable.preloadAll().then(() => {
 
 app.use(favicon(path.join(resolveApp('public/favicon.ico'))));
 app.use('/public', express.static(resolveApp('__server')));
+app.get('/service-worker.js', (req, res) => {
+  res.set({ 'Content-Type': 'application/javascript; charset=utf-8' });
+  res.send(fs.readFileSync(resolveApp('__server/service-worker.js')));
+});
 app.get('*', async (req, res) => {
   res.send(await serverRender(req));
 });

@@ -3,8 +3,10 @@ import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as path from 'path';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
+import * as SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import * as ManifestPlugin from 'webpack-manifest-plugin';
 import paths from '../../paths';
+
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
@@ -79,6 +81,14 @@ export default (
       new CopyWebpackPlugin([{
         from: paths.appPublic
       }])
+    );
+    webpackConfig.plugins.push(
+      new SWPrecacheWebpackPlugin({
+        cacheId: 'client',
+        dontCacheBustUrlsMatching: false,
+        filename: 'service-worker.js',
+        minify: true
+      })
     );
   }
   return webpackConfig;
