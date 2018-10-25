@@ -13,6 +13,14 @@ program
   .option('-T, --no-tests', 'ignore test hook');
 
 program
+  .command('create <app-name>')
+  .description('run dev create')
+  .action((name, cmd) => {
+    const service = new Service({});
+    service.create(name)
+  })
+
+program
   .command('start')
   .description('run dev server')
   .option("-m, --mode <mode>", "specify env mode")

@@ -2,6 +2,7 @@ import * as fs from 'fs-extra';
 
 import paths from '../config/paths';
 import build from './build';
+import create from './create';
 import start from './start';
 
 interface IAppOptions {
@@ -53,6 +54,10 @@ export default class Service {
 
   public build = () => {
     build(this.options);
+  }
+
+  public create = (projectName: string) => {
+    create(projectName, {});
   }
 
   public initConfig = async () => {
