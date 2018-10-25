@@ -13,7 +13,8 @@
     "bin",
     "config",
     "scripts",
-    "build"
+    "build",
+    "template"
   ],
   "keywords": [
     "react",
