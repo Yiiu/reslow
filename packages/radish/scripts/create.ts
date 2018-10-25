@@ -21,7 +21,7 @@ export default async (projectName: string, data: any) => {
     const command = 'npm';
     const args = [
       'install',
-      '--loglevel',
+      // '--loglevel',
       'error',
     ];
     const child = spawn(command, args, { stdio: 'inherit' });
