@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'production';
-
 import chalk from 'chalk';
 import * as fs from 'fs-extra';
 import * as webpack from 'webpack';
@@ -22,6 +20,7 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 export default async (appConfig: IAppConfig) => {
+
   const fileSizes = await measureFileSizesBeforeBuild(paths.appBuild);
   fs.emptyDirSync(paths.appBuild);
   build(fileSizes, appConfig)

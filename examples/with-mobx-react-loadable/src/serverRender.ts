@@ -5,6 +5,7 @@
 import appRender from './app/server';
 
 export default async (req: any) => {
-  const a = await require('../__server/react-loadable.json');
-  return appRender(req, a);
+  const loadable = await require('../__server/react-loadable.json');
+  const manifest = await require('../__server/asset-manifest.json');
+  return appRender(req, loadable, manifest);
 };

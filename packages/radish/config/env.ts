@@ -19,7 +19,7 @@ export const getEnv = (isServer: boolean, options: IAppConfig, publicUrl: string
         return env;
       },
       {
-        NODE_ENV: process.env.NODE_ENV || 'development',
+        NODE_ENV: process.env.NODE_ENV,
         PORT: process.env.PORT || options.port || '3000',
         HOST: process.env.HOST || options.host || 'localhost',
         SSR: process.env.SSR,

@@ -61,8 +61,7 @@ export default class Service {
   }
 
   public initConfig = async () => {
-    fs.emptyDirSync(paths.appBuild);
-    if (await fs.existsSync(paths.appConfig)) {
+    if (fs.existsSync(paths.appConfig)) {
       try {
         const config = require(paths.appConfig);
         this.options = {

@@ -17,7 +17,7 @@ export default (
       webpackConfig.plugins.push(
         new StartServerPlugin({
           name: 'server.js',
-          nodeArgs: ['-r', 'source-map-support/register'],
+          nodeArgs: ['-r', require.resolve('source-map-support/register')],
         })
       );
     }

@@ -88,7 +88,7 @@ export default (
         dontCacheBustUrlsMatching: false,
         filename: 'service-worker.js',
         minify: true
-      })
+      } as any)
     );
   }
   return webpackConfig;

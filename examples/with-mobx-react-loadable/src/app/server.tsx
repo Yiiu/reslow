@@ -12,7 +12,20 @@ import Html from '@containers/Html';
 
 import { createStore } from '@stores';
 
-export default (req: Request, stats: any) => {
+interface IBundle {
+  id: number;
+  name: string;
+  file: string;
+}
+interface IStats {
+  [key: string]: IBundle[];
+}
+
+interface IManifest {
+  [key: string]: string;
+}
+
+export default (req: Request, stats: IStats, manifest: IManifest) => {
   const modules: string[] = [];
   const newStores = createStore();
   const markup = renderToString(
@@ -35,6 +48,8 @@ export default (req: Request, stats: any) => {
     .map(bundle => {
       return `/public/${bundle.file}`;
     });
+  js.push(manifest['main.js']);
+  style.push(manifest['main.css']);
   return renderToString(
     <Html markup={markup} js={js} style={style} />
   );

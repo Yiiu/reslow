@@ -8,7 +8,7 @@ import { Provider } from 'mobx-react';
 import App from '@containers';
 // import registerServiceWorker from './registerServiceWorker';
 
-import '@styles/index.less';
+import './styles/index.less';
 
 import { createStore, IStores } from '@stores';
 
@@ -38,7 +38,7 @@ export const render = (Component: typeof App) => {
     }
   })();
   let hydrate: ReactDOM.Renderer;
-  if (process.env.SSR === undefined) {
+  if (!!process.env.SSR) {
     hydrate = ReactDOM.render;
   } else {
     hydrate = ReactDOM.hydrate;
@@ -71,9 +71,8 @@ if (moduleWithHotReload.hot) {
 }
 
 render(App);
-(() => {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js');
-  }
-})();
-// registerServiceWorker();
+// (() => {
+//   if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+//     navigator.serviceWorker.register('/service-worker.js');
+//   }
+// })();

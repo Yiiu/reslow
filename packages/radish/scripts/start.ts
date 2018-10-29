@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'development';
-
 import * as historyApiFallback from 'connect-history-api-fallback';
 import * as express from 'express';
 import * as path from 'path';
@@ -18,6 +16,7 @@ import paths from '../config/paths';
 const app = express();
 
 export default async (config: IAppConfig) => {
+
   const port = parseInt(config.port + '', 10) + (config.ssr ? 1 : 0);
   const host = process.env.HOST ? process.env.HOST : (config.host || 'localhost');
   const DIST_DIR = path.join(paths.appBuildSrc);
@@ -37,18 +36,18 @@ export default async (config: IAppConfig) => {
       }
     });
   };
-  clientCompiler.hooks.afterEmit.tap('clientDone', () => {
-    if (config.ssr) {
-      serverCompiler.watch({},
-        stats => {}
-      );
-    }
-  });
+  // clientCompiler.hooks.done.tap('clientDone', () => {
+  // });
+  if (config.ssr) {
+    serverCompiler.watch({},
+      stats => {}
+    );
+  }
 
   const devMiddleware = WebpackDevMiddleware(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     logLevel: 'silent',
-    historyApiFallback: true
+    // historyApiFallback: true
   } as any);
   app.use(require('webpack-hot-middleware')((clientCompiler as any), {}));
   app.use(historyApiFallback());

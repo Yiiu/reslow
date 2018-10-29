@@ -3,7 +3,6 @@
 'use strict';
 const program = require('commander');
 
-const Service = require('../build/scripts').default;
 
 
 program
@@ -16,6 +15,7 @@ program
   .command('create <app-name>')
   .description('run dev create')
   .action((name, cmd) => {
+    const Service = require('../build/scripts').default;
     const service = new Service({});
     service.create(name)
   })
@@ -31,6 +31,9 @@ program
     mode,
     open
   }) => {
+    process.env.NODE_ENV = 'development';
+    const Service = require('../build/scripts').default;
+
     const service = new Service({ ssr, mode, open });
     await service.initConfig()
     service.start()
@@ -45,6 +48,9 @@ program
     ssr = false,
     mode
   }) => {
+    process.env.NODE_ENV = 'production';
+    const Service = require('../build/scripts').default;
+
     const service = new Service({ ssr, mode });
     await service.initConfig()
     service.build()

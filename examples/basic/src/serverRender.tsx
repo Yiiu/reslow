@@ -6,10 +6,10 @@ import * as React from 'react';
 import App from './app/App';
 import { renderToString } from 'react-dom/server';
 
-const assets = require('../__server/asset-manifest.json');
 
 export default async (req: any) => {
   const markup = renderToString(<App />);
+  const assets = require('../__server/asset-manifest.json');
   return `
     <!doctype html>
     <html lang="">

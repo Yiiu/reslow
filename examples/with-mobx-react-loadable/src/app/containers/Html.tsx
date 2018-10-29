@@ -21,7 +21,6 @@ export default class Html extends React.PureComponent<IHtmlProps> {
           {helmet.title.toComponent()}
           {helmet.meta.toComponent()}
           {helmet.link.toComponent()}
-          <link rel="stylesheet" type="text/css" href="/public/static/style/main.css" />
           {
             style.map(v => (
               <link key={v} rel="stylesheet" type="text/css" href={v} />
@@ -35,7 +34,7 @@ export default class Html extends React.PureComponent<IHtmlProps> {
               <script key={v} src={v} />
             ))
           }
-          <script src="/public/static/chunks/app.js" />
+          {/* <script src="/public/static/chunks/app.js" /> */}
         </body>
       </html>
     );
