@@ -1,5 +1,5 @@
 {
-  "name": "radish",
+  "name": "radish-server",
   "version": "0.0.30",
   "description": "## Quick Overview",
   "main": "index.js",
@@ -76,5 +76,6 @@
     "@types/webpack-manifest-plugin": "^1.3.2",
     "@types/webpack-merge": "^4.1.3",
     "@types/webpackbar": "^2.6.0"
-  }
+  },
+  "gitHead": "9e5bf4c929069c9ab6d601c059837cf3d120c9e3"
 }
