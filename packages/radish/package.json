@@ -1,6 +1,6 @@
 {
   "name": "radish",
-  "version": "1.0.0",
+  "version": "0.0.30",
   "description": "## Quick Overview",
   "main": "index.js",
   "bin": {
