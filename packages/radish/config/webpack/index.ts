@@ -39,6 +39,7 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
     devtool: 'source-map',
     name: isServer ? 'server' : 'client',
     target: isServer ? 'node' : 'web',
+    context: process.cwd(),
     cache: true,
     output: {
       path: path.join(paths.appBuildSrc, isServer ? 'server' : ''),
