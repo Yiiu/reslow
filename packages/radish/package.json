@@ -1,7 +1,10 @@
 {
   "name": "radish-server",
   "version": "0.0.31",
-  "description": "## Quick Overview",
+  "description": "Create server-rendered react applications",
+  "repository": "git@github.com:yiiu/radish.git",
+  "author": "Yiiu <yu.gintoki@gmail.com>",
+  "license": "MIT",
   "main": "index.js",
   "bin": {
     "radish": "./bin/radish.js"
@@ -11,8 +14,6 @@
     "dev": "tsc -w",
     "prepublishOnly": "tsc"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
