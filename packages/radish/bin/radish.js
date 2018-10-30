@@ -13,6 +13,7 @@ program
   .command('create <app-name>')
   .description('run dev create')
   .action((name, args) => {
+    process.env.NODE_ENV = 'production';
     const Service = require('../build/lib/Service').default;
     const service = new Service();
     service.create(name, args)

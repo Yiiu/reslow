@@ -32,7 +32,7 @@ export default class Create {
     this.inCurrent = projectName === '.';
     this.name = this.inCurrent ? path.relative('../', cwd) : projectName;
     this.targetDir = path.resolve(cwd, projectName || '.');
-    this.templatePath = this.options.template || path.resolve(__dirname, '../../../template');
+    this.templatePath = this.options.template || path.resolve(__dirname, '../../../../template');
   }
 
   public create = async () => {
@@ -131,7 +131,7 @@ export default class Create {
       if (!inCurrent) {
         console.log(chalk.cyan('  cd'), name);
       }
-      console.log(`  ${chalk.cyan(`${useYarn ? 'yarn' : 'npm'} start`)}`);
+      console.log(`  ${chalk.cyan(`${useYarn ? 'yarn' : 'npm'} start`)}\n`);
     });
   }
 
@@ -142,6 +142,7 @@ export default class Create {
       '@types/react',
       '@types/express',
       'react-dom',
+      'react',
       'radish-server',
       'express',
       'react-hot-loader'
