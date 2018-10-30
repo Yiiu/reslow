@@ -1,7 +1,6 @@
-import * as path from 'path';
 import * as fs from 'fs';
+import * as path from 'path';
 
-import * as AutoDllPlugin from 'autodll-webpack-plugin';
 import * as webpack from 'webpack';
 
 import * as CaseSensitivePathPlugin from 'case-sensitive-paths-webpack-plugin';
@@ -9,7 +8,9 @@ import * as FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import * as merge from 'webpack-merge';
 import * as WebpackBar from 'webpackbar';
-import * as WriteFilePlugin from 'write-file-webpack-plugin';
+
+const WriteFilePlugin = require('write-file-webpack-plugin');
+// const AutoDllPlugin = require('autodll-webpack-plugin');
 
 import clientPlugins from './plugins/client';
 import serverPlugins from './plugins/server';
@@ -87,6 +88,14 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
       rules: [
         styleLoader({ isServer }),
         scriptLoader({ isServer }),
+        {
+          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+          loader: require.resolve('url-loader'),
+          options: {
+            limit: 10000,
+            name: 'static/media/[name].[hash:8].[ext]',
+          },
+        },
         {
           exclude: [/\.(js|jsx|mjs|tsx?)$/, /\.html$/, /\.json$/, /\.css|less$/],
           loader: require.resolve('file-loader'),

@@ -53,6 +53,7 @@
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.1.3",
     "webpack": "^4.23.1",
+    "webpack-chain": "^5.0.1",
     "webpack-dev-middleware": "^3.4.0",
     "webpack-hot-middleware": "^2.24.3",
     "webpack-manifest-plugin": "^2.0.4",
@@ -61,10 +62,13 @@
     "write-file-webpack-plugin": "^4.4.1"
   },
   "devDependencies": {
+    "@types/autoprefixer": "^9.1.0",
     "@types/case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "@types/commander": "^2.12.2",
     "@types/connect-history-api-fallback": "^1.3.1",
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/cross-spawn": "^6.0.0",
+    "@types/express": "^4.16.0",
     "@types/friendly-errors-webpack-plugin": "^0.1.1",
     "@types/fs-extra": "^5.0.4",
     "@types/html-webpack-plugin": "^3.2.0",
@@ -73,10 +77,13 @@
     "@types/react-loadable": "^5.4.1",
     "@types/sw-precache-webpack-plugin": "^0.11.0",
     "@types/webpack": "^4.4.17",
+    "@types/webpack-chain": "^4.8.1",
     "@types/webpack-dev-middleware": "^2.0.2",
     "@types/webpack-manifest-plugin": "^1.3.2",
     "@types/webpack-merge": "^4.1.3",
-    "@types/webpackbar": "^2.6.0"
+    "@types/webpackbar": "^2.6.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0"
   },
   "gitHead": "9e5bf4c929069c9ab6d601c059837cf3d120c9e3"
 }

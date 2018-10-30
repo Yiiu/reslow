@@ -11,7 +11,7 @@ export default ({
     use: [
       // require.resolve('cache-loader'),
       {
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         options: {
           plugins: [
             require.resolve('react-hot-loader/babel'),
@@ -26,7 +26,7 @@ export default ({
         }
       },
       {
-        loader: 'ts-loader'
+        loader: require.resolve('ts-loader')
       }
     ]
   };

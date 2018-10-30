@@ -1,6 +1,6 @@
 {
   "files": [],
   "references": [
-    { "path": "./radish" }
+    { "path": "./package/radish" }
   ]
 }

@@ -1,11 +1,10 @@
 {
-  "extends": "../tsconfig.settings.json",
+  "extends": "../../tsconfig.settings.json",
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "."
   },
   "include":[
-    "scripts",
-    "config"
+    "lib"
   ]
 }

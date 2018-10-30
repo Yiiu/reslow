@@ -1,8 +1,9 @@
 // import * as path from 'path';
-import * as StartServerPlugin from 'start-server-webpack-plugin';
 // import paths from '../../paths';
 
 import { AppPluginConfig } from '../../../scripts/index';
+
+const StartServerPlugin = require('start-server-webpack-plugin');
 
 export default (
   webpackConfig: any,

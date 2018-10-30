@@ -27,7 +27,7 @@ export const getEnv = (isServer: boolean, options: IAppConfig, publicUrl: string
         CLIENT_PUBLIC_PATH: process.env.CLIENT_PUBLIC_PATH,
         PUBLIC_URL: publicUrl,
         APP_PUBLIC_DIR: paths.appBuildPublic
-      }
+      } as NodeJS.ProcessEnv
     );
   process.env = {
     ...process.env,
@@ -37,7 +37,7 @@ export const getEnv = (isServer: boolean, options: IAppConfig, publicUrl: string
     'process.env': Object.keys(process.env).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
       return env;
-    }, {}),
+    }, {} as NodeJS.ProcessEnv),
   };
   return {
     raw: {

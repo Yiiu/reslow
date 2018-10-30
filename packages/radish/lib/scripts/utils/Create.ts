@@ -21,7 +21,7 @@ export default class Create {
 
   public useYarn: boolean;
 
-  constructor(projectName, options: ICreateOptions = {}) {
+  constructor(projectName: string, options: ICreateOptions = {}) {
     this.projectName = projectName;
     this.options = options;
     this.useYarn = this.shouldUseYarn();
@@ -54,7 +54,7 @@ export default class Create {
           type: 'confirm',
           name: 'ok',
           message: 'Generate project in current directory?'
-        })
+        });
         if (!ok) {
           return false;
         }
@@ -63,7 +63,7 @@ export default class Create {
           type: 'confirm',
           name: 'ok',
           message: 'The folder already exists, is it deleted?'
-        })
+        });
         if (!ok) {
           return false;
         }
@@ -87,8 +87,8 @@ export default class Create {
     const { targetDir, useYarn, name, inCurrent } = this;
     const dependencies = this.getInstallPackage();
     process.chdir(targetDir);
-    let command;
-    let args;
+    let command: string;
+    let args: string[];
     if (useYarn) {
       command = 'yarnpkg';
       args = ['add', '--exact'];

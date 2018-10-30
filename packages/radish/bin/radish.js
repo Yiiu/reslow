@@ -3,8 +3,6 @@
 'use strict';
 const program = require('commander');
 
-
-
 program
   .version('0.1.0')
   .option('-C, --chdir <path>', 'change the working directory')
@@ -14,10 +12,10 @@ program
 program
   .command('create <app-name>')
   .description('run dev create')
-  .action((name, cmd) => {
-    const Service = require('../build/scripts').default;
-    const service = new Service({});
-    service.create(name)
+  .action((name, args) => {
+    const Service = require('../build/lib/Service').default;
+    const service = new Service();
+    service.create(name, args)
   })
 
 program
@@ -26,17 +24,11 @@ program
   .option("-m, --mode <mode>", "specify env mode")
   .option("-s, --ssr", "use server render")
   .option("-o, --open", "open browser on server start")
-  .action(async ({
-    ssr = false,
-    mode,
-    open
-  }) => {
+  .action((args) => {
     process.env.NODE_ENV = 'development';
-    const Service = require('../build/scripts').default;
-
-    const service = new Service({ ssr, mode, open });
-    await service.initConfig()
-    service.start()
+    const Service = require('../build/lib/Service').default;
+    const service = new Service();
+    service.run('start', args)
   });
 
 program
@@ -44,16 +36,11 @@ program
   .description('run build')
   .option("-m, --mode <mode>", "Which start mode to use")
   .option("-s, --ssr", "Use ssr")
-  .action(async ({
-    ssr = false,
-    mode
-  }) => {
+  .action((args) => {
     process.env.NODE_ENV = 'production';
-    const Service = require('../build/scripts').default;
-
-    const service = new Service({ ssr, mode });
-    await service.initConfig()
-    service.build()
+    const Service = require('../build/lib/Service').default;
+    const service = new Service();
+    service.run('build', args)
   });
 
 program.parse(process.argv);

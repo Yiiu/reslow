@@ -58,13 +58,13 @@ export default async (appConfig: IAppConfig) => {
     });
 };
 
-const build = async (previousFileSizes, config: IAppConfig): Promise<any> => {
+const build = async (previousFileSizes: any, config: IAppConfig): Promise<any> => {
   const clientConfig = webpackConfigs(false, false, config);
   const serverConfig = webpackConfigs(false, true, config);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
   return new Promise((resolve, reject) => {
-    clientMultiCompiler.run((err, stats) => {
+    clientMultiCompiler.run((err: any, stats: any) => {
       let messages;
       if (err) {
         if (!err.message) {
@@ -80,7 +80,7 @@ const build = async (previousFileSizes, config: IAppConfig): Promise<any> => {
         );
       }
       if (config.ssr) {
-        serverMultiCompiler.run((serverErr, serverStats) => {
+        serverMultiCompiler.run((serverErr: any, serverStats: any) => {
           let serverMessages;
           if (serverErr) {
             if (!serverErr.message) {
