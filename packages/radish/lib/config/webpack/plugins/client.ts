@@ -10,20 +10,19 @@ import paths from '../../paths';
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 
-import { AppPluginConfig } from '../../../scripts/index';
+// import { AppPluginConfig } from '../../../scripts/index';
 
 export default (
-  webpackConfig: any,
   {
     isServer,
-    dev,
     ssr,
     port,
     host,
     clientIndexJs
-  }: AppPluginConfig,
-  dotenv: any
+  }: any,
+  webpackConfig: any
 ) => {
+  const dev = process.env.NODE_ENV === 'development';
   const hostPort = parseInt(port + '', 10) + (ssr ? 1 : 0);
   if (!isServer) {
     webpackConfig.entry = [
@@ -35,7 +34,7 @@ export default (
       );
       webpackConfig.devServer = {
         compress: true,
-        host: dotenv.raw.HOST,
+        host: process.env.HOST,
         port: hostPort,
         watchOptions: {
           ignored: /node_modules/,
@@ -56,7 +55,7 @@ export default (
         }),
       );
       webpackConfig.plugins.unshift(
-        new InterpolateHtmlPlugin(HtmlWebpackPlugin, dotenv.raw),
+        new InterpolateHtmlPlugin(HtmlWebpackPlugin, process.env),
       );
     } else {
       webpackConfig.plugins.push(

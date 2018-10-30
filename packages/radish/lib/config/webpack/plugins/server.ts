@@ -1,18 +1,19 @@
 // import * as path from 'path';
 // import paths from '../../paths';
 
-import { AppPluginConfig } from '../../../scripts/index';
+// import { AppPluginConfig } from '../../../scripts/index';
 
 const StartServerPlugin = require('start-server-webpack-plugin');
 
 export default (
-  webpackConfig: any,
   {
     isServer,
-    dev,
     serverIndexJs
-  }: AppPluginConfig
+  }: any,
+  webpackConfig: any,
 ) => {
+  const dev = process.env.NODE_ENV === 'development';
+
   if (isServer) {
     if (dev) {
       webpackConfig.plugins.push(

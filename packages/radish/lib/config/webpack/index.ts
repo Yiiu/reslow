@@ -22,7 +22,7 @@ import paths from '../paths';
 import scriptLoader from './loader/script';
 import styleLoader from './loader/style';
 
-import { IAppConfig } from '../../scripts/index';
+import Service, { IArgs, IProjectOptions } from '../../Service';
 
 const appDirectory = fs.realpathSync(process.cwd());
 const nodePath = (process.env.NODE_PATH || '')
@@ -31,16 +31,12 @@ const nodePath = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter);
 
-export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
-  const config: IAppConfig = {
-    plugins: [],
-    clientIndexJs: paths.appClientIndexJs,
-    serverIndexJs: paths.appServerIndexJs,
-    ...appConfig
-  };
-  const webpackMode = dev ? 'development' : 'production';
+export default (isServer: boolean, service: Service, args: IArgs) => {
+  const { projectOptions } = service;
+  const dev = process.env.NODE_ENV === 'development';
+  const webpackMode = process.env.NODE_ENV;
   const publicPath = '/public/';
-  const dotenv = getEnv(isServer, config, '');
+  const dotenv = getEnv(isServer, projectOptions, '');
   let webpackConfig = {
     mode: webpackMode,
     devtool: 'source-map',
@@ -72,7 +68,7 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
         'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client')
       },
       modules: [
-        path.resolve(__dirname, '../../../node_modules'),
+        path.resolve(__dirname, '../../../../node_modules'),
         paths.appNodeModules
       ].concat(
         // It is guaranteed to exist because we tweak it in `env.js`
@@ -127,7 +123,7 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
       dev && new webpack.HotModuleReplacementPlugin(),
       dev && !isServer && new FriendlyErrorsWebpackPlugin(),
       dev && new CaseSensitivePathPlugin(),
-      dev && config.ssr && new WriteFilePlugin({
+      dev && args.ssr && new WriteFilePlugin({
         exitOnErrors: false,
         log: false,
         // required not to cache removed files
@@ -135,33 +131,37 @@ export default (dev: boolean, isServer: boolean, appConfig: IAppConfig) => {
       }),
     ].filter(Boolean)
   };
-  config.plugins!.push(clientPlugins);
-  config.plugins!.push(serverPlugins);
-  config.plugins!.forEach(plugin => {
-    if (typeof(plugin) === 'function') {
-      webpackConfig = plugin(
-        webpackConfig,
-        { ...config, dev, isServer },
-        dotenv
-      );
-    } else if (typeof(plugin) === 'string') {
-      const radishPlugin = require(`radish-plugin-${plugin}`).default;
-      if (!radishPlugin) {
-        throw new Error(`Unable to find '${plugin}`);
-      }
-      webpackConfig = radishPlugin(
-        webpackConfig,
-        { ...config, dev, isServer },
-        dotenv
-      );
-    }
-  });
-  if (config.configureWebpack) {
-    webpackConfig = merge(config.configureWebpack, (webpackConfig as any)) as any;
-  }
-
-  if (config.modify) {
-    webpackConfig = config.modify<typeof webpackConfig>(webpackConfig, { ...config, dev, isServer }, dotenv);
-  }
+  webpackConfig = clientPlugins({
+    isServer,
+    ...args,
+    ...service.projectOptions
+  }, webpackConfig);
+  webpackConfig = serverPlugins({
+    isServer,
+    ...args,
+    ...service.projectOptions
+  }, webpackConfig);
+  webpackConfig = service.resolveWebpackConfig(webpackConfig, isServer, args) as any;
+  // config.plugins!.push(clientPlugins);
+  // config.plugins!.push(serverPlugins);
+  // config.plugins!.forEach(plugin => {
+  //   if (typeof(plugin) === 'function') {
+  //     webpackConfig = plugin(
+  //       webpackConfig,
+  //       { ...config, dev, isServer },
+  //       dotenv
+  //     );
+  //   } else if (typeof(plugin) === 'string') {
+  //     const radishPlugin = require(`radish-plugin-${plugin}`).default;
+  //     if (!radishPlugin) {
+  //       throw new Error(`Unable to find '${plugin}`);
+  //     }
+  //     webpackConfig = radishPlugin(
+  //       webpackConfig,
+  //       { ...config, dev, isServer },
+  //       dotenv
+  //     );
+  //   }
+  // });
   return webpackConfig;
 };

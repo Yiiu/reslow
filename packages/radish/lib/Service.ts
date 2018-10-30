@@ -7,23 +7,20 @@ import paths from './config/paths';
 
 import Script from './scripts';
 
-interface IAppOptions {
-  isServer: boolean;
-  dev: boolean;
+export interface IPluginObject {
+  [key: string]: any;
 }
 
 export type Command = 'start' | 'build';
 
-export type AppPluginConfig = IAppConfig & IAppOptions;
-
-export type IAppConfigPlugin = <T>(webpackConfig: T, config: AppPluginConfig, dotenv: any) => any;
-
-export interface IServiceOptions {
-  ssr?: boolean;
-  mode?: string;
-  open?: boolean;
+export interface IPluginOptions {
+  isServer: boolean;
+  args: IArgs;
 }
 
+export type AppConfigPlugin<T> = (options: IPluginOptions, webpackConfig: T) => T;
+
+export type ConfigureWebpack = IPluginObject | AppConfigPlugin<IPluginObject>;
 export interface IArgs {
   ssr?: boolean;
   mode?: string;
@@ -31,62 +28,51 @@ export interface IArgs {
 }
 
 export interface IProjectOptions {
-  configureWebpack?: any;
-  plugins?: IAppConfigPlugin[];
-  chainWebpack?: () => {};
-}
-
-export interface IAppConfig extends IServiceOptions {
-  configureWebpack?: any;
-  plugins?: IAppConfigPlugin[];
-  hotPort?: string;
-  hotHost?: string;
+  configureWebpack?: ConfigureWebpack;
+  clientIndexJs: string;
+  serverIndexJs: string;
+  chainWebpack?: AppConfigPlugin<Config>;
   port?: string;
   host?: string;
-  modify?: IAppConfigPlugin;
-  serverIndexJs?: string;
-  clientIndexJs?: string;
-  mode?: string;
 }
 
 export default class Service {
   public projectOptions!: IProjectOptions;
-  public webpackChainFns: any[] = [];
-  public webpackRawConfigFns: any[] = [];
+  public webpackChainFns: Array<AppConfigPlugin<Config>> = [];
+  public webpackRawConfigFns: ConfigureWebpack[] = [];
+  public webpackConfig: any;
 
   public script = new Script(this);
 
-  public initOptions: IAppConfig = {
-    port: process.env.PORT || '3000',
-    host: process.env.HOST || 'localhost'
-  };
-
-  constructor(options: IServiceOptions) {
+  constructor() {
     // this.options = {
     //   ...options,
     //   ...this.initOptions
     // };
   }
 
-  public resolveChainableWebpackConfig () {
+  public resolveChainableWebpackConfig (isServer: boolean, args: IArgs) {
     const chainableConfig = new Config();
     // apply chains
-    this.webpackChainFns.forEach(fn => fn(chainableConfig));
+    this.webpackChainFns.forEach(fn => fn({ isServer, args }, chainableConfig));
     return chainableConfig;
   }
 
-  public resolveWebpackConfig (chainableConfig = this.resolveChainableWebpackConfig()) {
-    let config = chainableConfig.toConfig();
-    // apply raw config fns
+  public resolveWebpackConfig = (
+    webpackConfig: any = {},
+    isServer: boolean,
+    args: IArgs
+  ) => {
+    const chainableConfig = this.resolveChainableWebpackConfig(isServer, args);
+
+    let config = merge(webpackConfig, chainableConfig.toConfig());
     this.webpackRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {
-        // function with optional return value
-        const res = fn({}, config);
+        const res = (fn as any)({ isServer, args }, config);
         if (res) {
           config = merge(config, res);
         }
       } else if (fn) {
-        // merge literal values
         config = merge(config, fn);
       }
     });
@@ -109,10 +95,16 @@ export default class Service {
   }
 
   public getUserOptions = () => {
+    const initConfig = {
+      host: 'localhost',
+      port: '3000',
+      clientIndexJs: paths.appClientIndexJs,
+      serverIndexJs: paths.appServerIndexJs
+    };
     if (fs.existsSync(paths.appConfig)) {
       try {
         const config = require(paths.appConfig);
-        return config;
+        return {...initConfig, ...config};
       } catch (e) {
         console.error('Invalid config.js file.', e);
         process.exit(1);

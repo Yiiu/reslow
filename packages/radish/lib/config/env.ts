@@ -1,4 +1,4 @@
-import { IAppConfig } from '../scripts/index';
+import { IProjectOptions } from '../Service';
 import paths from './paths';
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -10,7 +10,7 @@ if (!NODE_ENV) {
 
 const REACT_APP = /^REACT_APP_/i;
 
-export const getEnv = (isServer: boolean, options: IAppConfig, publicUrl: string) => {
+export const getEnv = (isServer: boolean, options: IProjectOptions, publicUrl: string) => {
   const raw = Object.keys(process.env)
     .filter(key => REACT_APP.test(key))
     .reduce(

@@ -12,15 +12,15 @@ export default class Script {
   }
 
   public run = (command: Command, args: IArgs) => {
-    this[command]();
+    this[command](args);
   }
 
-  public start = () => {
-    start({});
+  public start = (args: IArgs) => {
+    start(this.service, args);
   }
 
-  public build = () => {
-    build({});
+  public build = (args: IArgs) => {
+    build(this.service, args);
   }
 
   public create = (projectName: string) => {

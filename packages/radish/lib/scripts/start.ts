@@ -6,7 +6,7 @@ import * as WebpackDevMiddleware from 'webpack-dev-middleware';
 
 import webpackConfigs from '../config/webpack/index';
 
-import { IAppConfig } from './index';
+import Service, { IArgs } from '../Service';
 
 // const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const openBrowser = require('react-dev-utils/openBrowser');
@@ -15,21 +15,24 @@ import paths from '../config/paths';
 
 const app = express();
 
-export default async (config: IAppConfig) => {
+export default async (service: Service, args: IArgs) => {
+  const { projectOptions } = service;
 
-  const port = parseInt(config.port + '', 10) + (config.ssr ? 1 : 0);
-  const host = process.env.HOST ? process.env.HOST : (config.host || 'localhost');
+  const port = parseInt(projectOptions.port + '', 10) + (args.ssr ? 1 : 0);
+  const host = process.env.HOST ? process.env.HOST : projectOptions.host;
+
   const DIST_DIR = path.join(paths.appBuildSrc);
-  const clientConfig = webpackConfigs(true, false, config);
-  const serverConfig = webpackConfigs(true, true, config);
+  const clientConfig = webpackConfigs(false, service, args);
+  const serverConfig = webpackConfigs(true, service, args);
   const clientCompiler = webpack(clientConfig as any);
   const serverCompiler = webpack(serverConfig as any);
+
   const serverListen = () => {
     app.listen(port, () => {
-      if (config.open) {
+      if (args.open) {
         openBrowser('http://localhost:3000');
       }
-      if (config.ssr) {
+      if (args.ssr) {
         console.info(`hot server at http://${host}:${port}\n`);
       } else {
         console.info(`\n\n 💂  Listening at http://${host}:${port}\n`);
@@ -38,7 +41,7 @@ export default async (config: IAppConfig) => {
   };
   // clientCompiler.hooks.done.tap('clientDone', () => {
   // });
-  if (config.ssr) {
+  if (args.ssr) {
     serverCompiler.watch({},
       stats => {}
     );

@@ -4,7 +4,7 @@ import * as webpack from 'webpack';
 import paths from '../config/paths';
 import webpackConfigs from '../config/webpack/index';
 
-import { IAppConfig } from './index';
+import Service, { IArgs } from '../Service';
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
@@ -19,11 +19,11 @@ const measureFileSizesBeforeBuild =
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
-export default async (appConfig: IAppConfig) => {
+export default async (service: Service, args: IArgs) => {
 
   const fileSizes = await measureFileSizesBeforeBuild(paths.appBuild);
   fs.emptyDirSync(paths.appBuild);
-  build(fileSizes, appConfig)
+  build(fileSizes, service, args)
     .then(({ warnings }) => {
       if (warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
@@ -58,9 +58,13 @@ export default async (appConfig: IAppConfig) => {
     });
 };
 
-const build = async (previousFileSizes: any, config: IAppConfig): Promise<any> => {
-  const clientConfig = webpackConfigs(false, false, config);
-  const serverConfig = webpackConfigs(false, true, config);
+const build = async (
+  previousFileSizes: any, service: Service, args: IArgs
+): Promise<any> => {
+  const { projectOptions } = service;
+
+  const clientConfig = webpackConfigs(false, service, args);
+  const serverConfig = webpackConfigs(true, service, args);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
   return new Promise((resolve, reject) => {
@@ -79,7 +83,7 @@ const build = async (previousFileSizes: any, config: IAppConfig): Promise<any> =
           stats.toJson({ all: false, warnings: true, errors: true })
         );
       }
-      if (config.ssr) {
+      if (args.ssr) {
         serverMultiCompiler.run((serverErr: any, serverStats: any) => {
           let serverMessages;
           if (serverErr) {
