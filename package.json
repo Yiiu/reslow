@@ -1,6 +1,6 @@
 {
   "name": "radish",
-  "version": "0.0.18",
+  "version": "0.1.0",
   "devDependencies": {
     "lerna": "^3.4.3"
   }
