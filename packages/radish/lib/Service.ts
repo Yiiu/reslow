@@ -2,10 +2,13 @@ import * as fs from 'fs-extra';
 import * as Config from 'webpack-chain';
 import * as merge from 'webpack-merge';
 
+
 // import * as commander from 'commander';
 import paths from './config/paths';
 
 import Scripts from './scripts';
+
+const mergeObject = require('merge');
 
 export interface IPluginObject {
   [key: string]: any;
@@ -32,9 +35,19 @@ export interface IProjectOptions {
   clientIndexJs: string;
   serverIndexJs: string;
   chainWebpack?: AppConfigPlugin<Config>;
+  plugins?: string[];
   port?: string;
   host?: string;
 }
+
+const webpackMerge = merge({
+  customizeArray: (a: any[], b: any[]) => {
+    return [...new Set([...a, ...b])];
+  },
+  customizeObject(a, b) {
+    return mergeObject(a, b);
+  },
+});
 
 export default class Service {
   public projectOptions!: IProjectOptions;
@@ -65,15 +78,15 @@ export default class Service {
   ) => {
     const chainableConfig = this.resolveChainableWebpackConfig(isServer, args);
 
-    let config = merge(webpackConfig, chainableConfig.toConfig());
+    let config = webpackMerge(webpackConfig, chainableConfig.toConfig());
     this.webpackRawConfigFns.forEach((fn) => {
       if (typeof fn === 'function') {
         const res = (fn as any)({ isServer, args }, config);
         if (res) {
-          config = merge(config, res);
+          config = webpackMerge(config, res);
         }
-      } else if (fn) {
-        config = merge(config, fn);
+      } else if (fn instanceof Object) {
+        config = webpackMerge(config, fn);
       }
     });
     return config;
@@ -83,6 +96,21 @@ export default class Service {
     this.projectOptions = this.getUserOptions();
     if (this.projectOptions.chainWebpack) {
       this.webpackChainFns.push(this.projectOptions.chainWebpack);
+    }
+    if (this.projectOptions.plugins instanceof Array) {
+      this.projectOptions.plugins.forEach((plugin) => {
+        if (typeof(plugin) === 'string') {
+          const completePluginName = `radish-plugin-${plugin}`;
+          const fn = require(`${process.cwd()}/node_modules/${completePluginName}`).default;
+          if (fn) {
+            this.webpackRawConfigFns.push(fn);
+          } else {
+            throw new Error(`Unable to find '${completePluginName}`);
+          }
+        } else if (typeof(plugin) === 'function') {
+          this.webpackRawConfigFns.push(plugin);
+        }
+      });
     }
     if (this.projectOptions.configureWebpack) {
       this.webpackRawConfigFns.push(this.projectOptions.configureWebpack);

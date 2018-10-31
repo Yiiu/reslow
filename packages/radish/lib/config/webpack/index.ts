@@ -122,7 +122,6 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       }),
       dev && new FriendlyErrorsWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),
-      dev && !isServer && new FriendlyErrorsWebpackPlugin(),
       dev && new CaseSensitivePathPlugin(),
       dev && args.ssr && new WriteFilePlugin({
         exitOnErrors: false,
@@ -136,12 +135,12 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     isServer,
     ...args,
     ...service.projectOptions,
-  },                            webpackConfig);
+  }, webpackConfig);
   webpackConfig = serverPlugins({
     isServer,
     ...args,
     ...service.projectOptions,
-  },                            webpackConfig);
+  }, webpackConfig);
   webpackConfig = service.resolveWebpackConfig(webpackConfig, isServer, args) as any;
   // config.plugins!.push(clientPlugins);
   // config.plugins!.push(serverPlugins);

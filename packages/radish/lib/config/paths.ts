@@ -7,6 +7,7 @@ const resolveApp = (relativePath: string) => path.resolve(appDirectory, relative
 
 export default {
   dotenv: resolveApp('.env'),
+  appPath: resolveApp('.'),
   appSrc: resolveApp('src'),
   appPackageJson: resolveApp('package.json'),
   appClientIndexJs: resolveApp('src/app/index.tsx'),

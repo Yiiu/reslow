@@ -7,8 +7,11 @@ import * as SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import * as ManifestPlugin from 'webpack-manifest-plugin';
 import paths from '../../paths';
 
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 // import { AppPluginConfig } from '../../../scripts/index';
 
@@ -64,31 +67,29 @@ export default (
         }),
       );
     }
-    webpackConfig.plugins.push(
+    webpackConfig.plugins = [
+      ...webpackConfig.plugins,
       new MiniCssExtractPlugin({
         filename: 'static/style/[name].css',
         chunkFilename: 'static/style/[id].css',
       }),
-    );
-    webpackConfig.plugins.push(
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
         publicPath: webpackConfig.output.publicPath,
       }),
-    );
-    webpackConfig.plugins.push(
       new CopyWebpackPlugin([{
         from: paths.appPublic,
       }]),
-    );
-    webpackConfig.plugins.push(
       new SWPrecacheWebpackPlugin({
         cacheId: 'client',
         dontCacheBustUrlsMatching: false,
         filename: 'service-worker.js',
         minify: true,
       } as any),
-    );
+      new ModuleNotFoundPlugin(paths.appPath),
+      new CaseSensitivePathsPlugin(),
+      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+    ]
   }
   return webpackConfig;
 };

@@ -25,11 +25,9 @@
   },
   "exclude": [
     "node_modules",
+    "__server",
     "build",
-    "scripts",
-    "webpack",
-    "jest",
-    "config.js"
+    "__server"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

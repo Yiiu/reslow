@@ -16,9 +16,11 @@
     "radish"
   ],
   "dependencies": {
+    "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-loader": "^3.5.4",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.1.4"
   },
   "gitHead": "fe1c5445f53c5672f38e90974f6fc9f5416f84b2"
 }
