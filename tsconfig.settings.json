@@ -2,6 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
+    "experimentalDecorators": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir":"./build",
@@ -12,5 +15,10 @@
     "composite": true,
     "alwaysStrict": true
     // "esModuleInterop": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "es"
+  ]
 }

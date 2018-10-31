@@ -5,7 +5,7 @@ import * as merge from 'webpack-merge';
 // import * as commander from 'commander';
 import paths from './config/paths';
 
-import Script from './scripts';
+import Scripts from './scripts';
 
 export interface IPluginObject {
   [key: string]: any;
@@ -38,11 +38,11 @@ export interface IProjectOptions {
 
 export default class Service {
   public projectOptions!: IProjectOptions;
-  public webpackChainFns: Array<AppConfigPlugin<Config>> = [];
+  public webpackChainFns: AppConfigPlugin<Config>[] = [];
   public webpackRawConfigFns: ConfigureWebpack[] = [];
   public webpackConfig: any;
 
-  public script = new Script(this);
+  public script = new Scripts(this);
 
   constructor() {
     // this.options = {
@@ -61,12 +61,12 @@ export default class Service {
   public resolveWebpackConfig = (
     webpackConfig: any = {},
     isServer: boolean,
-    args: IArgs
+    args: IArgs,
   ) => {
     const chainableConfig = this.resolveChainableWebpackConfig(isServer, args);
 
     let config = merge(webpackConfig, chainableConfig.toConfig());
-    this.webpackRawConfigFns.forEach(fn => {
+    this.webpackRawConfigFns.forEach((fn) => {
       if (typeof fn === 'function') {
         const res = (fn as any)({ isServer, args }, config);
         if (res) {
@@ -90,7 +90,7 @@ export default class Service {
     this.script.run(command, args);
   }
 
-  public create = (projectName: string, args: IArgs) => {
+  public create = (projectName: string) => {
     this.script.create(projectName);
   }
 
@@ -99,12 +99,12 @@ export default class Service {
       host: 'localhost',
       port: '3000',
       clientIndexJs: paths.appClientIndexJs,
-      serverIndexJs: paths.appServerIndexJs
+      serverIndexJs: paths.appServerIndexJs,
     };
     if (fs.existsSync(paths.appConfig)) {
       try {
         const config = require(paths.appConfig);
-        return {...initConfig, ...config};
+        return { ...initConfig, ...config };
       } catch (e) {
         console.error('Invalid config.js file.', e);
         process.exit(1);

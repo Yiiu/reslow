@@ -6,7 +6,6 @@ import * as webpack from 'webpack';
 import * as CaseSensitivePathPlugin from 'case-sensitive-paths-webpack-plugin';
 import * as FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import * as merge from 'webpack-merge';
 import * as WebpackBar from 'webpackbar';
 
 const WriteFilePlugin = require('write-file-webpack-plugin');
@@ -22,7 +21,7 @@ import paths from '../paths';
 import scriptLoader from './loader/script';
 import styleLoader from './loader/style';
 
-import Service, { IArgs, IProjectOptions } from '../../Service';
+import Service, { IArgs } from '../../Service';
 
 const appDirectory = fs.realpathSync(process.cwd());
 const nodePath = (process.env.NODE_PATH || '')
@@ -45,9 +44,11 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     context: process.cwd(),
     cache: true,
     output: {
-      path: path.join(paths.appBuildSrc, isServer ? 'server' : ''),
-      filename: isServer ? 'server.js' : (dev ? 'static/chunks/app.js' : 'static/chunks/app.[hash].js'),
       publicPath,
+      path: path.join(paths.appBuildSrc, isServer ? 'server' : ''),
+      filename: (
+        isServer ? 'server.js' : (dev ? 'static/chunks/app.js' : 'static/chunks/app.[hash].js')
+      ),
       libraryTarget: isServer ? 'commonjs2' : 'jsonp',
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
@@ -65,20 +66,20 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
-        'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client')
+        'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client'),
       },
       modules: [
         path.resolve(__dirname, '../../../../node_modules'),
-        paths.appNodeModules
+        paths.appNodeModules,
       ].concat(
         // It is guaranteed to exist because we tweak it in `env.js`
-        nodePath.split(path.delimiter).filter(Boolean)
+        nodePath.split(path.delimiter).filter(Boolean),
       ),
       plugins: [
         new TsconfigPathsPlugin({
           // configFile: paths.appTsconfig
         }),
-      ]
+      ],
     },
     module: {
       rules: [
@@ -99,7 +100,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
             name: 'static/media/[name].[hash:8].[ext]',
           },
         },
-      ]
+      ],
     },
     plugins: [
       // dev && !isServer && new AutoDllPlugin({
@@ -117,7 +118,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         minimal: false,
         compiledIn: false,
         // profile: true,
-        name: isServer ? 'server' : 'client'
+        name: isServer ? 'server' : 'client',
       }),
       dev && new FriendlyErrorsWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),
@@ -127,20 +128,20 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         exitOnErrors: false,
         log: false,
         // required not to cache removed files
-        useHashIndex: false
+        useHashIndex: false,
       }),
-    ].filter(Boolean)
+    ].filter(Boolean),
   };
   webpackConfig = clientPlugins({
     isServer,
     ...args,
-    ...service.projectOptions
-  }, webpackConfig);
+    ...service.projectOptions,
+  },                            webpackConfig);
   webpackConfig = serverPlugins({
     isServer,
     ...args,
-    ...service.projectOptions
-  }, webpackConfig);
+    ...service.projectOptions,
+  },                            webpackConfig);
   webpackConfig = service.resolveWebpackConfig(webpackConfig, isServer, args) as any;
   // config.plugins!.push(clientPlugins);
   // config.plugins!.push(serverPlugins);

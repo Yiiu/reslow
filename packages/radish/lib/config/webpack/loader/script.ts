@@ -2,9 +2,7 @@ export interface IScriptLoaderConfig {
   isServer: boolean;
 }
 
-export default ({
-  isServer = false
-}: IScriptLoaderConfig) => {
+export default (_: IScriptLoaderConfig) => {
   return {
     test: /\.(js|mjs|jsx|ts|tsx)$/,
     exclude: /node_modules/,
@@ -19,15 +17,15 @@ export default ({
             require.resolve('@babel/plugin-proposal-object-rest-spread'),
             require.resolve('@babel/plugin-proposal-class-properties'),
             [require.resolve('@babel/plugin-transform-runtime'), {
-              'corejs': 2
+              corejs: 2,
             }],
-            require.resolve('react-loadable/babel')
-          ]
-        }
+            require.resolve('react-loadable/babel'),
+          ],
+        },
       },
       {
-        loader: require.resolve('ts-loader')
-      }
-    ]
+        loader: require.resolve('ts-loader'),
+      },
+    ],
   };
 };

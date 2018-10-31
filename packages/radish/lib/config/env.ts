@@ -4,7 +4,7 @@ import paths from './paths';
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
   throw new Error(
-    'The NODE_ENV environment variable is required but was not specified.'
+    'The NODE_ENV environment variable is required but was not specified.',
   );
 }
 
@@ -26,23 +26,23 @@ export const getEnv = (isServer: boolean, options: IProjectOptions, publicUrl: s
         BUILD_TARGET: isServer ? 'server' : 'client',
         CLIENT_PUBLIC_PATH: process.env.CLIENT_PUBLIC_PATH,
         PUBLIC_URL: publicUrl,
-        APP_PUBLIC_DIR: paths.appBuildPublic
-      } as NodeJS.ProcessEnv
+        APP_PUBLIC_DIR: paths.appBuildPublic,
+      } as NodeJS.ProcessEnv,
     );
   process.env = {
     ...process.env,
-    ...raw
+    ...raw,
   };
   const stringified = {
     'process.env': Object.keys(process.env).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
       return env;
-    }, {} as NodeJS.ProcessEnv),
+    },                                             {} as NodeJS.ProcessEnv),
   };
   return {
+    stringified,
     raw: {
-      ...process.env
+      ...process.env,
     },
-    stringified
   };
 };

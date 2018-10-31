@@ -7,17 +7,17 @@ import webpackConfigs from '../config/webpack/index';
 import Service, { IArgs } from '../Service';
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const clearConsole = require('react-dev-utils/clearConsole');
+const fileSizeReporter = require('react-dev-utils/FileSizeReporter');
+// const clearConsole = require('react-dev-utils/clearConsole');
 // const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 
 const measureFileSizesBeforeBuild =
-  FileSizeReporter.measureFileSizesBeforeBuild;
+  fileSizeReporter.measureFileSizesBeforeBuild;
 // const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 // const useYarn = fs.existsSync(paths.yarnLockFile);
 
-const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
-const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
+// const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
+// const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 export default async (service: Service, args: IArgs) => {
 
@@ -29,14 +29,16 @@ export default async (service: Service, args: IArgs) => {
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
         console.log(
+          // tslint:disable-next-line:prefer-template
           '\n Search for the ' +
             chalk.underline(chalk.yellow('keywords')) +
-            ' to learn more about each warning.'
+            ' to learn more about each warning.',
         );
         console.log(
+          // tslint:disable-next-line:prefer-template
           'To ignore, add ' +
             chalk.cyan('// eslint-disable-next-line') +
-            ' to the line before.\n'
+            ' to the line before.\n',
         );
       } else {
         console.log(chalk.green('Compiled successfully.\n'));
@@ -50,7 +52,7 @@ export default async (service: Service, args: IArgs) => {
       //   WARN_AFTER_CHUNK_GZIP_SIZE
       // );
     })
-    .catch(err => {
+    .catch((err) => {
       if (err && err.message) {
         console.log(err.message);
       }
@@ -59,9 +61,8 @@ export default async (service: Service, args: IArgs) => {
 };
 
 const build = async (
-  previousFileSizes: any, service: Service, args: IArgs
+  previousFileSizes: any, service: Service, args: IArgs,
 ): Promise<any> => {
-  const { projectOptions } = service;
 
   const clientConfig = webpackConfigs(false, service, args);
   const serverConfig = webpackConfigs(true, service, args);
@@ -80,9 +81,10 @@ const build = async (
         });
       } else {
         messages = formatWebpackMessages(
-          stats.toJson({ all: false, warnings: true, errors: true })
+          stats.toJson({ all: false, warnings: true, errors: true }),
         );
       }
+      console.log(messages);
       if (args.ssr) {
         serverMultiCompiler.run((serverErr: any, serverStats: any) => {
           let serverMessages;
@@ -96,12 +98,12 @@ const build = async (
             });
           } else {
             serverMessages = formatWebpackMessages(
-              serverStats.toJson({ all: false, warnings: true, errors: true })
+              serverStats.toJson({ all: false, warnings: true, errors: true }),
             );
           }
           const resolveArgs = {
-            stats: serverStats,
             previousFileSizes,
+            stats: serverStats,
             warnings: serverMessages.warnings,
           };
           return resolve(resolveArgs);

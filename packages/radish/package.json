@@ -84,7 +84,9 @@
     "@types/webpack-merge": "^4.1.3",
     "@types/webpackbar": "^2.6.0",
     "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0"
+    "tslint-config-airbnb": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-react": "^3.6.0"
   },
   "gitHead": "9e5bf4c929069c9ab6d601c059837cf3d120c9e3"
 }

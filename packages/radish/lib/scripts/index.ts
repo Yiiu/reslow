@@ -24,6 +24,6 @@ export default class Script {
   }
 
   public create = (projectName: string) => {
-    create(projectName, {});
+    create(projectName);
   }
 }

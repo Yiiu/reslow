@@ -18,7 +18,7 @@ const app = express();
 export default async (service: Service, args: IArgs) => {
   const { projectOptions } = service;
 
-  const port = parseInt(projectOptions.port + '', 10) + (args.ssr ? 1 : 0);
+  const port = parseInt(projectOptions.port!.toString(), 10) + (args.ssr ? 1 : 0);
   const host = process.env.HOST ? process.env.HOST : projectOptions.host;
 
   const DIST_DIR = path.join(paths.appBuildSrc);
@@ -42,9 +42,7 @@ export default async (service: Service, args: IArgs) => {
   // clientCompiler.hooks.done.tap('clientDone', () => {
   // });
   if (args.ssr) {
-    serverCompiler.watch({},
-      stats => {}
-    );
+    serverCompiler.watch({}, () => {});
   }
 
   const devMiddleware = WebpackDevMiddleware(clientCompiler, {

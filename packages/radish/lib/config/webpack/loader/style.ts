@@ -6,13 +6,13 @@ export interface IStyleLoaderConfig {
 }
 
 export default ({
-  isServer = false
+  isServer = false,
 }: IStyleLoaderConfig) => {
   return {
     test: /\.css|less$/,
     use: [
       !isServer && {
-        loader: require.resolve('extracted-loader')
+        loader: require.resolve('extracted-loader'),
       },
       !isServer && {
         loader: MiniCssExtractPlugin.loader,
@@ -22,7 +22,7 @@ export default ({
         options: {
           importLoaders: 1,
           modules: true,
-          localIdentName: '[local]_[hash:base64:8]'
+          localIdentName: '[local]_[hash:base64:8]',
         },
       },
       {
@@ -50,7 +50,7 @@ export default ({
         // options: {
         //   modifyVars: theme
         // }
-      }
-    ].filter(Boolean)
+      },
+    ].filter(Boolean),
   };
 };

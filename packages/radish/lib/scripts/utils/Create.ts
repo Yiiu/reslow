@@ -46,14 +46,14 @@ export default class Create {
     if (fs.existsSync(targetDir)) {
       console.log(
         ` Uh oh! Looks like there's already a directory called ${chalk.red(
-          name
-        )}.`
+          name,
+        )}.`,
       );
       if (inCurrent) {
         const { ok } = await inquirer.prompt<{ok: boolean}>({
           type: 'confirm',
           name: 'ok',
-          message: 'Generate project in current directory?'
+          message: 'Generate project in current directory?',
         });
         if (!ok) {
           return false;
@@ -62,7 +62,7 @@ export default class Create {
         const { ok } = await inquirer.prompt<{ok: boolean}>({
           type: 'confirm',
           name: 'ok',
-          message: 'The folder already exists, is it deleted?'
+          message: 'The folder already exists, is it deleted?',
         });
         if (!ok) {
           return false;
@@ -107,7 +107,7 @@ export default class Create {
     }
     const child = spawn(command, args, { stdio: 'inherit' });
     console.log(`\n ${chalk.green('Installing packages.')} This might take a couple of minutes.\n`);
-    child.on('close', code => {
+    child.on('close', (code) => {
       if (code !== 0) {
         console.log(chalk.red(`error: ${command} ${args.join(' ')}`));
         return;
@@ -121,8 +121,8 @@ export default class Create {
       console.log();
       console.log(
         chalk.cyan(
-          `  ${useYarn ? 'yarn' : 'npm'} ${useYarn ? '' : 'run'} build`
-        )
+          `  ${useYarn ? 'yarn' : 'npm'} ${useYarn ? '' : 'run'} build`,
+        ),
       );
       console.log('    Bundles the app into static files for production.');
       console.log();
@@ -145,7 +145,7 @@ export default class Create {
       'react',
       'radish-server',
       'express',
-      'react-hot-loader'
+      'react-hot-loader',
     ];
     return allDependencies;
   }

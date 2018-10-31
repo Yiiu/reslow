@@ -18,19 +18,19 @@ export default (
     ssr,
     port,
     host,
-    clientIndexJs
+    clientIndexJs,
   }: any,
-  webpackConfig: any
+  webpackConfig: any,
 ) => {
   const dev = process.env.NODE_ENV === 'development';
-  const hostPort = parseInt(port + '', 10) + (ssr ? 1 : 0);
+  const hostPort = parseInt(port.toString(), 10) + (ssr ? 1 : 0);
   if (!isServer) {
     webpackConfig.entry = [
-      clientIndexJs
+      clientIndexJs,
     ];
     if (dev) {
       webpackConfig.entry.unshift(
-        `webpack-hot-middleware/client?reload=true&path=http://${host}:${hostPort}/__webpack_hmr`
+        `webpack-hot-middleware/client?reload=true&path=http://${host}:${hostPort}/__webpack_hmr`,
       );
       webpackConfig.devServer = {
         compress: true,
@@ -61,33 +61,33 @@ export default (
       webpackConfig.plugins.push(
         new ReactLoadablePlugin({
           filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
-        })
+        }),
       );
     }
     webpackConfig.plugins.push(
       new MiniCssExtractPlugin({
         filename: 'static/style/[name].css',
-        chunkFilename: 'static/style/[id].css'
-      })
+        chunkFilename: 'static/style/[id].css',
+      }),
     );
     webpackConfig.plugins.push(
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
-        publicPath: webpackConfig.output.publicPath
-      })
+        publicPath: webpackConfig.output.publicPath,
+      }),
     );
     webpackConfig.plugins.push(
       new CopyWebpackPlugin([{
-        from: paths.appPublic
-      }])
+        from: paths.appPublic,
+      }]),
     );
     webpackConfig.plugins.push(
       new SWPrecacheWebpackPlugin({
         cacheId: 'client',
         dontCacheBustUrlsMatching: false,
         filename: 'service-worker.js',
-        minify: true
-      } as any)
+        minify: true,
+      } as any),
     );
   }
   return webpackConfig;

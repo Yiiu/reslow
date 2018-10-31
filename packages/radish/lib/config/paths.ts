@@ -20,5 +20,5 @@ export default {
   appBuildSrc: resolveApp(config.build),
   appTsconfig: resolveApp('tsconfig.json'),
   appBuildClient: resolveApp(config.clientBuild),
-  appConfig: resolveApp('config.js')
+  appConfig: resolveApp('config.js'),
 };

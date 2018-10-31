@@ -8,7 +8,7 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 export default (
   {
     isServer,
-    serverIndexJs
+    serverIndexJs,
   }: any,
   webpackConfig: any,
 ) => {
@@ -20,7 +20,7 @@ export default (
         new StartServerPlugin({
           name: 'server.js',
           nodeArgs: ['-r', require.resolve('source-map-support/register')],
-        })
+        }),
       );
     }
     webpackConfig.node = {

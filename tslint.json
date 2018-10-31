@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier", "tslint-config-airbnb"],
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
@@ -124,13 +124,13 @@
       }
     ],
     "use-isnan": true,
-    "variable-name": [
-      true,
-      "allow-leading-underscore",
-      "ban-keywords",
-      "check-format",
-      "allow-pascal-case"
-    ],
+    // "variable-name": [
+    //   true,
+    //   "allow-leading-underscore",
+    //   "ban-keywords",
+    //   "check-format",
+    //   "allow-pascal-case"
+    // ],
     "whitespace": [
       true,
       "check-branch",
@@ -140,9 +140,13 @@
       "check-type",
       "check-typecast"
     ],
+    "import-name": false,
+    "array-type": false,
+    "variable-name": [true, "check-format", "allow-pascal-case"],
+    "no-this-assignment": [true, {"allowed-names": ["^self$"], "allow-destructuring": true}],
     "jsx-no-lambda": false,
     "jsx-no-string-ref": false,
     "jsx-boolean-value": [true, "never"],
-    "jsx-wrap-multiline": false
+    "jsx-no-multiline-js": false
   }
 }
