@@ -1,4 +1,4 @@
-# radish
+![logo](/logo.png)
 
 ## Quick Overview
 
