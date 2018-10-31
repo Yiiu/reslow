@@ -16,12 +16,12 @@ export default (
 
   if (isServer) {
     if (dev) {
-      webpackConfig.plugins.push(
-        new StartServerPlugin({
-          name: 'server.js',
-          nodeArgs: ['-r', require.resolve('source-map-support/register')],
-        }),
-      );
+      // webpackConfig.plugins.push(
+      //   new StartServerPlugin({
+      //     name: 'server.js',
+      //     nodeArgs: ['-r', require.resolve('source-map-support/register')],
+      //   }),
+      // );
     }
     webpackConfig.node = {
       __console: false,

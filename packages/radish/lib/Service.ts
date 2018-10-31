@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
+import * as httpProxyMiddleware from 'http-proxy-middleware';
 import * as Config from 'webpack-chain';
 import * as merge from 'webpack-merge';
-
 
 // import * as commander from 'commander';
 import paths from './config/paths';
@@ -30,6 +30,10 @@ export interface IArgs {
   open?: boolean;
 }
 
+export interface IProxyOptions {
+  [key: string]: httpProxyMiddleware.Config;
+}
+
 export interface IProjectOptions {
   configureWebpack?: ConfigureWebpack;
   clientIndexJs: string;
@@ -38,6 +42,7 @@ export interface IProjectOptions {
   plugins?: string[];
   port?: string;
   host?: string;
+  proxy?: IProxyOptions;
 }
 
 const webpackMerge = merge({
