@@ -2,15 +2,13 @@
 
 'use strict';
 const program = require('commander');
+const chalk = require('chalk');
 
 program
-  .version('0.1.0')
-  .option('-C, --chdir <path>', 'change the working directory')
-  .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
-  .option('-T, --no-tests', 'ignore test hook');
+  .version(require('../package.json').version)
 
 program
-  .command('create <app-name>')
+  .command('create <project-name>')
   .description('run dev create')
   .action((name, args) => {
     process.env.NODE_ENV = 'production';
@@ -43,5 +41,9 @@ program
     const service = new Service();
     service.run('build', args)
   });
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+}
 
 program.parse(process.argv);

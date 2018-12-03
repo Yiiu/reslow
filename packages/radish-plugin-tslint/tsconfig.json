@@ -2,6 +2,9 @@
   "extends": "../../tsconfig.settings.json",
   "compilerOptions": {
     "outDir": "build",
+    "include": [
+        "index.ts"
+    ],
     "rootDir": "."
   }
 }
