@@ -3,8 +3,8 @@
 // import * as WebpackHotMiddleware from 'webpack-hot-middleware';
 
 import * as React from 'react';
-import App from './app/App';
 import { renderToString } from 'react-dom/server';
+import App from './app/App';
 
 const assets = require('../__server/asset-manifest.json');
 
@@ -22,10 +22,10 @@ export default async (req: any) => {
           assets['main.css']
             ? `<link rel="stylesheet" href="${assets['main.css']}">`
             : ''
-        } 
+        }
     </head>
     <body>
-        <div id="root">${markup}</div>    
+        <div id="root">${markup}</div>
         <script src="${assets['main.js']}" defer crossorigin></script>
     </body>
     </html>

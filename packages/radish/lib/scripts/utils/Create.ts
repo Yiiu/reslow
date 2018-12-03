@@ -24,7 +24,8 @@ export default class Create {
   constructor(projectName: string, options: ICreateOptions = {}) {
     this.projectName = projectName;
     this.options = options;
-    this.useYarn = this.shouldUseYarn();
+    // this.useYarn = this.shouldUseYarn();
+    this.useYarn = false;
     this.getInfo(this.projectName);
   }
 

@@ -17,7 +17,6 @@ if ((module as any).hot) {
       console.error(error);
     }
   });
-  console.log(process.env.APP_PUBLIC_DIR)
   console.info('✅  Server-side HMR Enabled!');
 }
 
