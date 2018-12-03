@@ -10,7 +10,6 @@ import * as WebpackDevMiddleware from 'webpack-dev-middleware';
 import webpackConfigs from '../config/webpack/index';
 
 import Service, { IArgs } from '../Service';
-const { spawn } = require('child_process');
 
 // const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const openBrowser = require('react-dev-utils/openBrowser');
@@ -51,7 +50,7 @@ export default async (service: Service, args: IArgs) => {
   });
   if (args.ssr) {
     serverCompiler.watch({}, () => {});
-    serverCompiler.hooks.afterEmit.tap('serverDone', (compilation) => {
+    serverCompiler.hooks.afterEmit.tap('serverDone', () => {
       setTimeout(() => {
         // const { existsAt } = compilation.assets['server.js'];
       }, 10);
@@ -68,7 +67,7 @@ export default async (service: Service, args: IArgs) => {
   app.use(devMiddleware);
   app.use(express.static(DIST_DIR));
   // if (!args.ssr && projectOptions.proxy instanceof Object) {
-  Object.keys(projectOptions.proxy!)
+  Object.keys(projectOptions.proxy! || {})
     .forEach((key) => {
       app.use(key, proxyMiddleware(projectOptions.proxy![key]));
     });

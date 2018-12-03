@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as httpProxyMiddleware from 'http-proxy-middleware';
+import * as _ from 'lodash';
 import * as Config from 'webpack-chain';
 import * as merge from 'webpack-merge';
 
@@ -7,8 +8,6 @@ import * as merge from 'webpack-merge';
 import paths from './config/paths';
 
 import Scripts from './scripts';
-
-const mergeObject = require('merge');
 
 export interface IPluginObject {
   [key: string]: any;
@@ -45,14 +44,7 @@ export interface IProjectOptions {
   proxy?: IProxyOptions;
 }
 
-const webpackMerge = merge({
-  customizeArray: (a: any[], b: any[]) => {
-    return [...new Set([...a, ...b])];
-  },
-  customizeObject(a, b) {
-    return mergeObject(a, b);
-  },
-});
+const webpackMerge = merge;
 
 export default class Service {
   public projectOptions!: IProjectOptions;
@@ -82,8 +74,9 @@ export default class Service {
     args: IArgs,
   ) => {
     const chainableConfig = this.resolveChainableWebpackConfig(isServer, args);
-
-    let config = webpackMerge(webpackConfig, chainableConfig.toConfig());
+    let config = chainableConfig.toConfig();
+    const original = config;
+    config = webpackMerge(webpackConfig, original);
     this.webpackRawConfigFns.forEach((fn) => {
       if (typeof fn === 'function') {
         const res = (fn as any)({ isServer, args }, config);
@@ -94,6 +87,12 @@ export default class Service {
         config = webpackMerge(config, fn);
       }
     });
+    if (config !== original) {
+      cloneRuleNames(
+        config.module && config.module.rules,
+        original.module && original.module.rules
+      );
+    }
     return config;
   }
 
@@ -144,4 +143,18 @@ export default class Service {
       }
     }
   }
+}
+
+function cloneRuleNames(to: any, from: any) {
+  if (!to || !from) {
+    return;
+  }
+  from.forEach((r: any, i: number) => {
+    if (to[i]) {
+      Object.defineProperty(to[i], '__ruleNames', {
+        value: r.__ruleNames
+      });
+      cloneRuleNames(to[i].oneOf, r.oneOf);
+    }
+  });
 }
