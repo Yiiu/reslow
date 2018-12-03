@@ -4,16 +4,16 @@ module.exports = {
   // plugins: [
   //   'tslint'
   // ],
-  configureWebpack: {
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          exclude: /node_modules/,
-          loader: 'tslint-loader',
-          enforce: 'pre'
-        }
-      ]
-    }
+  chainWebpack(_, config) {
+    config.module
+      .rule('tslint')
+      .test(/\.tsx?$/)
+      .pre()
+      .exclude
+        .add(/node_modules/)
+        .end()
+      .use('tslint-loader')
+        .loader('tslint-loader')
+        .end()
   }
 }
