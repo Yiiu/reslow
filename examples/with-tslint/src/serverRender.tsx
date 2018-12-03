@@ -16,16 +16,16 @@ export default async (req: any) => {
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta charSet='utf-8' />
-        <title>Welcome to Razzle</title>
+        <title>Welcome to Radish</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         ${
           assetManifestJson['main.css']
             ? `<link rel="stylesheet" href="${assetManifestJson['main.css']}">`
             : ''
-        } 
+        }
     </head>
     <body>
-        <div id="root">${markup}</div>    
+        <div id="root">${markup}</div>
         <script src="${assetManifestJson['main.js']}" defer crossorigin></script>
     </body>
     </html>

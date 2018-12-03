@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "radish start -s",
-    "start:server": "cross-env SSR=true radish start"
+    "build": "radish build -s"
   },
   "author": "",
   "license": "ISC",

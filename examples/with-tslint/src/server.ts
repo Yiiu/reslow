@@ -7,7 +7,7 @@ const app = express();
 
 if ((module as any).hot) {
   (module as any).hot.accept(() => {
-    console.log('🔁  HMR Reloading...');
+    console.log('🔁  HMR Reloading ');
   });
   (module as any).hot.accept('./serverRender', () => {
     console.log('🔁  HMR Reloading `./serverRender`...');
@@ -17,7 +17,6 @@ if ((module as any).hot) {
       console.error(error);
     }
   });
-  console.log(process.env.APP_PUBLIC_DIR);
   console.info('✅  Server-side HMR Enabled!');
 }
 
