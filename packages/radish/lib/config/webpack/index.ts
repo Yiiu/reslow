@@ -83,23 +83,27 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     },
     module: {
       rules: [
-        styleLoader({ isServer }),
-        scriptLoader({ isServer }),
         {
-          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-          loader: require.resolve('url-loader'),
-          options: {
-            limit: 10000,
-            name: 'static/media/[name].[hash:8].[ext]',
-          },
-        },
-        {
-          exclude: [/\.(js|jsx|mjs|tsx?)$/, /\.html$/, /\.json$/, /\.css|less$/],
-          loader: require.resolve('file-loader'),
-          options: {
-            name: 'static/media/[name].[hash:8].[ext]',
-          },
-        },
+          oneOf: [
+            styleLoader({ isServer }),
+            scriptLoader({ isServer }),
+            {
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              loader: require.resolve('url-loader'),
+              options: {
+                limit: 10000,
+                name: 'static/media/[name].[hash:8].[ext]',
+              },
+            },
+            {
+              exclude: [/\.(js|jsx|mjs|tsx?)$/, /\.html$/, /\.json$/],
+              loader: require.resolve('file-loader'),
+              options: {
+                name: 'static/media/[name].[hash:8].[ext]',
+              },
+            },
+          ]
+        }
       ],
     },
     plugins: [
