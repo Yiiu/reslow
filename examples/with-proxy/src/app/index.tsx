@@ -15,7 +15,6 @@ const ReactHotLoader = isDevelop
 
 export const render = (Component: typeof App) => {
   let hydrate: ReactDOM.Renderer;
-  console.log(process.env);
   if (process.env.SSR === undefined) {
     hydrate = ReactDOM.render;
   } else {
@@ -36,10 +35,6 @@ if (moduleWithHotReload.hot) {
     const {App: NewApp} = require('./App.tsx');
     render(NewApp);
   });
-  // moduleWithHotReload.hot.accept('./stores', () => {
-  //   const data = require('./stores');
-  //   console.log(data);
-  // });
 }
 
 render(App);
