@@ -1,8 +1,8 @@
 module.exports = {
   proxy: {
-    '/api': {
-      target: 'https://swapi.co/api/',
-      pathRewrite: {'^/api': '/'},
+    '/users': {
+      target: 'http://jsonplaceholder.typicode.com/users/',
+      pathRewrite: {'^/users': '/'},
       changeOrigin: true
     }
   }

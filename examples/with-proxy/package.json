@@ -14,6 +14,7 @@
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",
     "express": "4.16.4",
+    "http-proxy-middleware": "^0.19.1",
     "radish-server": "^0.1.4",
     "react": "16.6.0",
     "react-dom": "16.6.0",
