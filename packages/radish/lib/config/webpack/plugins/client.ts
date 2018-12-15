@@ -74,8 +74,7 @@ export default (
         chunkFilename: 'static/style/[id].css',
       }),
       new ManifestPlugin({
-        fileName: 'asset-manifest.json',
-        publicPath: webpackConfig.output.publicPath,
+        fileName: 'asset-manifest.json'
       }),
       new CopyWebpackPlugin([{
         from: paths.appPublic,
@@ -89,7 +88,7 @@ export default (
       new ModuleNotFoundPlugin(paths.appPath),
       new CaseSensitivePathsPlugin(),
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    ]
+    ];
   }
   return webpackConfig;
 };
