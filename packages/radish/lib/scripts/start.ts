@@ -30,7 +30,7 @@ export default async (service: Service, args: IArgs) => {
   const serverConfig = serverWebpackConfig(service, args);
   const clientCompiler = webpack(clientConfig as any);
   const serverCompiler = webpack(serverConfig as any);
-  console.log(clientConfig);
+
   const serverListen = () => {
     app.listen(port, () => {
       if (args.open) {
