@@ -1,8 +1,10 @@
 import chalk from 'chalk';
 import * as fs from 'fs-extra';
 import * as webpack from 'webpack';
+
 import paths from '../config/paths';
-import webpackConfigs from '../config/webpack/index';
+import clientWebpackConfig from '../config/webpack/client';
+import serverWebpackConfig from '../config/webpack/server';
 
 import Service, { IArgs } from '../Service';
 
@@ -64,8 +66,8 @@ const build = async (
   previousFileSizes: any, service: Service, args: IArgs,
 ): Promise<any> => {
 
-  const clientConfig = webpackConfigs(false, service, args);
-  const serverConfig = webpackConfigs(true, service, args);
+  const clientConfig = clientWebpackConfig(service, args);
+  const serverConfig = serverWebpackConfig(service, args);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
   return new Promise((resolve, reject) => {

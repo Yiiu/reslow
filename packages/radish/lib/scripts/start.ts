@@ -7,7 +7,8 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import * as WebpackDevMiddleware from 'webpack-dev-middleware';
 
-import webpackConfigs from '../config/webpack/index';
+import clientWebpackConfig from '../config/webpack/client';
+import serverWebpackConfig from '../config/webpack/server';
 
 import Service, { IArgs } from '../Service';
 
@@ -25,8 +26,8 @@ export default async (service: Service, args: IArgs) => {
   const host = process.env.HOST ? process.env.HOST : projectOptions.host;
 
   const DIST_DIR = path.join(paths.appBuildSrc);
-  const clientConfig = webpackConfigs(false, service, args);
-  const serverConfig = webpackConfigs(true, service, args);
+  const clientConfig = clientWebpackConfig(service, args);
+  const serverConfig = serverWebpackConfig(service, args);
   const clientCompiler = webpack(clientConfig as any);
   const serverCompiler = webpack(serverConfig as any);
 
@@ -57,7 +58,7 @@ export default async (service: Service, args: IArgs) => {
     });
   }
   const devMiddleware = WebpackDevMiddleware(clientCompiler, {
-    publicPath: clientConfig.output.publicPath,
+    publicPath: clientConfig.output!.publicPath,
     logLevel: 'silent',
     serverSideRender: true
     // historyApiFallback: true
