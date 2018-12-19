@@ -1,4 +1,5 @@
-// import * as fs from 'fs';
+import * as path from 'path';
+import * as fs from 'fs';
 // import * as requireFromString from 'require-from-string';
 // import * as WebpackHotMiddleware from 'webpack-hot-middleware';
 
@@ -9,7 +10,9 @@ import { renderToString } from 'react-dom/server';
 
 export default async (req: any) => {
   const markup = renderToString(<App />);
-  const assets = require('../__server/asset-manifest.json');
+  const assets = JSON.parse(
+    fs.readFileSync(path.join(process.env.APP_PUBLIC_DIR as any, 'asset-manifest.json')).toString()
+  );
   return `
     <!doctype html>
     <html lang="">
