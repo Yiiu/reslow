@@ -6,6 +6,7 @@ import * as merge from 'webpack-merge';
 
 // import * as commander from 'commander';
 import paths from './config/paths';
+import defaultPptions from './options';
 
 import Scripts from './scripts';
 
@@ -42,6 +43,10 @@ export interface IProjectOptions {
   port?: string;
   host?: string;
   proxy?: IProxyOptions;
+  autoDll: {
+    vendor: string[]
+    polyfills: string[]
+  };
 }
 
 const webpackMerge = merge;
@@ -127,16 +132,10 @@ export default class Service {
   }
 
   public getUserOptions = () => {
-    const initConfig = {
-      host: 'localhost',
-      port: '3000',
-      clientIndexJs: paths.appClientIndexJs,
-      serverIndexJs: paths.appServerIndexJs,
-    };
     if (fs.existsSync(paths.appConfig)) {
       try {
         const config = require(paths.appConfig);
-        return { ...initConfig, ...config };
+        return { ...defaultPptions, ...config };
       } catch (e) {
         console.error('Invalid config.js file.', e);
         process.exit(1);

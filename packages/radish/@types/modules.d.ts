@@ -10,6 +10,8 @@ declare module 'react-dev-utils/openBrowser'
 
 declare module 'webpack-manifest-plugin'
 
+declare module 'autodll-webpack-plugin'
+
 declare module "*.json" {
 	const result: any;
 }

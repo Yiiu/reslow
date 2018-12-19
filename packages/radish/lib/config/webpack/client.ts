@@ -11,6 +11,7 @@ import Service, { IArgs } from '../../Service';
 import paths from '../paths';
 import baseConfig from './base';
 
+const AutoDllPlugin = require('autodll-webpack-plugin');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -21,7 +22,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { host, port, clientIndexJs } = projectOptions;
+  const { host, port, clientIndexJs, autoDll } = projectOptions;
   const hostPort = parseInt(port!.toString(), 10) + (args.ssr ? 1 : 0);
   const clientConfig = {
     entry: [
@@ -54,6 +55,14 @@ export default (service: Service, args: IArgs) => {
         template: paths.appHtml,
       }),
       !args!.ssr && new InterpolateHtmlPlugin(HtmlWebpackPlugin, process.env),
+      dev && new AutoDllPlugin({
+        debug: true,
+        filename: '[name].js',
+        entry: {
+          vendor: autoDll.vendor || [],
+          polyfills: autoDll.polyfills || [],
+        }
+      }),
       new ReactLoadablePlugin({
         filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
       }),

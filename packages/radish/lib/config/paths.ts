@@ -21,5 +21,7 @@ export default {
   appBuildSrc: resolveApp(config.build),
   appTsconfig: resolveApp('tsconfig.json'),
   appBuildClient: resolveApp(config.clientBuild),
+  assetManifest: resolveApp(`${config.build}/asset-manifest.json`),
+  assetLoadable: resolveApp(`${config.build}/react-loadable.json`),
   appConfig: resolveApp('config.js'),
 };

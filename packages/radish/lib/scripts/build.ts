@@ -86,7 +86,6 @@ const build = async (
           stats.toJson({ all: false, warnings: true, errors: true }),
         );
       }
-      console.log(messages);
       if (args.ssr) {
         serverMultiCompiler.run((serverErr: any, serverStats: any) => {
           let serverMessages;

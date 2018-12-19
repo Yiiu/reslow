@@ -41,14 +41,12 @@ export default (service: Service, args: IArgs) => {
         ],
         raw: true,
       }),
-      new StartServerPlugin({
+      dev && new StartServerPlugin({
         name: 'server.js',
         nodeArgs: ['-r', require.resolve('source-map-support/register')],
       }),
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      }),
-    ]
+      dev && new webpack.WatchIgnorePlugin([paths.assetManifest, paths.assetLoadable])
+    ].filter(Boolean)
   };
   return merge(baseConfig(true, service, args) as any, serverConfig as any);
 };

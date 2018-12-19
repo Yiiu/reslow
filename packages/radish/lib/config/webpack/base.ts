@@ -7,6 +7,7 @@ import * as webpack from 'webpack';
 import * as WebpackBar from 'webpackbar';
 
 const WriteFilePlugin = require('write-file-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 import paths from '../paths';
 
@@ -101,6 +102,9 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       ],
     },
     plugins: [
+      new CircularDependencyPlugin({
+        exclude: /node_modules/
+      }),
       new webpack.DefinePlugin(dotenv.stringified),
       new webpack.NamedModulesPlugin(),
       new WebpackBar({
@@ -110,7 +114,9 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         name: isServer ? 'server' : 'client',
       }),
       dev && new FriendlyErrorsWebpackPlugin(),
-      dev && new webpack.HotModuleReplacementPlugin(),
+      dev && new webpack.HotModuleReplacementPlugin({
+        multiStep: true
+      }),
       dev && new CaseSensitivePathPlugin(),
       dev && args.ssr && new WriteFilePlugin({
         exitOnErrors: false,
@@ -118,7 +124,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         // required not to cache removed files
         useHashIndex: false,
       }),
-    ]
+    ].filter(Boolean)
   };
   return webpackConfig;
 };
