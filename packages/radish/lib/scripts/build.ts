@@ -71,21 +71,21 @@ const build = async (
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
   return new Promise((resolve, reject) => {
-    clientMultiCompiler.run((err: any, stats: any) => {
-      let messages;
-      if (err) {
-        if (!err.message) {
-          return reject(err);
-        }
-        messages = formatWebpackMessages({
-          errors: [err.message],
-          warnings: [],
-        });
-      } else {
-        messages = formatWebpackMessages(
-          stats.toJson({ all: false, warnings: true, errors: true }),
-        );
-      }
+    clientMultiCompiler.run(() => {
+      // let messages;
+      // if (err) {
+      //   if (!err.message) {
+      //     return reject(err);
+      //   }
+      //   messages = formatWebpackMessages({
+      //     errors: [err.message],
+      //     warnings: [],
+      //   });
+      // } else {
+      //   messages = formatWebpackMessages(
+      //     stats.toJson({ all: false, warnings: true, errors: true }),
+      //   );
+      // }
       if (args.ssr) {
         serverMultiCompiler.run((serverErr: any, serverStats: any) => {
           let serverMessages;
