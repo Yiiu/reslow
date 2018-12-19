@@ -66,12 +66,13 @@ export default (service: Service, args: IArgs) => {
       new ReactLoadablePlugin({
         filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
       }),
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+        writeToFileEmit: true
+      }),
       new MiniCssExtractPlugin({
         filename: 'static/style/[name].css',
         chunkFilename: 'static/style/[id].css',
-      }),
-      new ManifestPlugin({
-        fileName: 'asset-manifest.json'
       }),
       new CopyWebpackPlugin([{
         from: paths.appPublic,

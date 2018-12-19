@@ -31,7 +31,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
 
   const webpackMode = process.env.NODE_ENV;
 
-  const webpackConfig = {
+  let webpackConfig = {
     mode: webpackMode as any,
     devtool: 'source-map',
     context: process.cwd(),
@@ -41,7 +41,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
     },
-    optimization: {
+    optimization: !dev ? {
       splitChunks: {
         cacheGroups: {
           commons: {
@@ -51,7 +51,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
           }
         }
       }
-    },
+    } : {},
     resolveLoader: {
       modules: [
         path.resolve(__dirname, '../../../node_modules'),
@@ -114,9 +114,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         name: isServer ? 'server' : 'client',
       }),
       dev && new FriendlyErrorsWebpackPlugin(),
-      dev && new webpack.HotModuleReplacementPlugin({
-        multiStep: true
-      }),
+      dev && new webpack.HotModuleReplacementPlugin(),
       dev && new CaseSensitivePathPlugin(),
       dev && args.ssr && new WriteFilePlugin({
         exitOnErrors: false,
@@ -126,5 +124,6 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       }),
     ].filter(Boolean)
   };
+  webpackConfig = service.resolveWebpackConfig(webpackConfig, isServer, args) as any;
   return webpackConfig;
 };
