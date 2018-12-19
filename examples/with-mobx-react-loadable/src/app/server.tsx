@@ -48,6 +48,7 @@ export default (req: Request, stats: IStats, manifest: IManifest) => {
     .map(bundle => {
       return `/public/${bundle.file}`;
     });
+  js.push(manifest['vendor.js']);
   js.push(manifest['main.js']);
   style.push(manifest['main.css']);
   return renderToString(

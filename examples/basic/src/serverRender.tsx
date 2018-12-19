@@ -25,8 +25,9 @@ export default async (req: any) => {
         } 
     </head>
     <body>
-        <div id="root">${markup}</div>    
-        <script src="${assets['main.js']}" defer crossorigin></script>
+        <div id="root">${markup}</div>
+        <script src="${assets['vendor.js']}" defer></script>
+        <script src="${assets['main.js']}" defer></script>
     </body>
     </html>
   `;

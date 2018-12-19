@@ -26,7 +26,8 @@ export default async (req: any) => {
     </head>
     <body>
         <div id="root">${markup}</div>
-        <script src="${assetManifestJson['main.js']}" defer crossorigin></script>
+        <script src="${assetManifestJson['vendor.js']}" defer></script>
+        <script src="${assetManifestJson['main.js']}" defer></script>
     </body>
     </html>
   `;
