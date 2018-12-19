@@ -89,7 +89,7 @@ export default (
       new ModuleNotFoundPlugin(paths.appPath),
       new CaseSensitivePathsPlugin(),
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    ]
+    ];
   }
   return webpackConfig;
 };
