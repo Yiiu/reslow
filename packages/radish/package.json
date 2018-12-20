@@ -1,6 +1,6 @@
 {
   "name": "radish-server",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
