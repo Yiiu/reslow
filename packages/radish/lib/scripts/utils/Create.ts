@@ -24,8 +24,7 @@ export default class Create {
   constructor(projectName: string, options: ICreateOptions = {}) {
     this.projectName = projectName;
     this.options = options;
-    // this.useYarn = this.shouldUseYarn();
-    this.useYarn = false;
+    this.useYarn = this.shouldUseYarn();
     this.getInfo(this.projectName);
   }
 
@@ -140,7 +139,6 @@ export default class Create {
     const allDependencies = [
       '@types/react',
       '@types/react-dom',
-      '@types/react',
       '@types/express',
       'react-dom',
       'react',
