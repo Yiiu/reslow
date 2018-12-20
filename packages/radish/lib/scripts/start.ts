@@ -19,7 +19,7 @@ export default async (service: Service, args: IArgs) => {
     serverCompiler.watch({}, () => {});
   }
   const clientDevServer = new DevServer(clientCompiler, (clientConfig as any).devServer);
-  clientDevServer.listen(projectOptions.devPort, (err: any) => {
+  clientDevServer.listen(args.ssr ? projectOptions.devPort : projectOptions.port, (err: any) => {
     if (err) {
       console.error(chalk.red(err));
     }

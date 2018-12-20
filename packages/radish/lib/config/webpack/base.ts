@@ -37,7 +37,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     context: process.cwd(),
     cache: true,
     output: {
-      publicPath: '/public/',
+      publicPath: args.ssr ? '/public/' : '/',
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
     },

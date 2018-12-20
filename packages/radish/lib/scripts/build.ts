@@ -70,10 +70,13 @@ const build = async (
   const serverConfig = serverWebpackConfig(service, args);
   const clientMultiCompiler = webpack(clientConfig as any) as any;
   const serverMultiCompiler = webpack(serverConfig as any) as any;
-  const [data] = await Promise.all([
-    webpackCompiler(clientMultiCompiler),
-    webpackCompiler(serverMultiCompiler)
-  ]);
+  const promiseArr = [
+    webpackCompiler(clientMultiCompiler)
+  ];
+  if (args.ssr) {
+    promiseArr.push(webpackCompiler(serverMultiCompiler));
+  }
+  const [data] = await Promise.all(promiseArr);
   return {
     previousFileSizes,
     config: clientConfig,

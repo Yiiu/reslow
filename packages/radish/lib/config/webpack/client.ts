@@ -1,4 +1,5 @@
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
+// import * as HardSourceWebpackPlugin  from 'hard-source-webpack-plugin';
 import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as OptimizeCssAssetsWebpackPlugin from 'optimize-css-assets-webpack-plugin';
@@ -23,10 +24,10 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { host, clientIndexJs, autoDll, devPort, proxy } = projectOptions;
+  const { host, port, clientIndexJs, autoDll, devPort, proxy } = projectOptions;
   const clientConfig = {
     entry: [
-      dev && `webpack-dev-server/client?http://${host}:${devPort}`,
+      dev && `webpack-dev-server/client?http://${host}:${args.ssr ? devPort : port}`,
       dev && 'webpack/hot/only-dev-server',
       dev && 'react-hot-loader/patch',
       clientIndexJs
@@ -56,7 +57,7 @@ export default (service: Service, args: IArgs) => {
       overlay: true,
       clientLogLevel: 'none',
       contentBase: paths.appBuildSrc,
-      publicPath: '/__server',
+      publicPath: args.ssr ? '/__server' : '/',
       before(app: any) {
         app.use(errorOverlayMiddleware());
       },
@@ -70,23 +71,27 @@ export default (service: Service, args: IArgs) => {
           }
         }
       }),
-      !args!.ssr && new HtmlWebpackPlugin({
+      !args.ssr && new HtmlWebpackPlugin({
         inject: true,
         template: paths.appHtml,
       }),
-      !args!.ssr && new InterpolateHtmlPlugin(HtmlWebpackPlugin, process.env),
-      dev && new AutoDllPlugin({
+      !args.ssr && new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
+        PUBLIC_URL: ''
+      }),
+      dev && args.ssr && new AutoDllPlugin({
         debug: true,
+        inject: true,
         filename: '[name].js',
         entry: {
           vendor: autoDll.vendor || [],
           polyfills: autoDll.polyfills || [],
         }
       }),
-      new ReactLoadablePlugin({
+      // dev && new HardSourceWebpackPlugin(),
+      args.ssr && new ReactLoadablePlugin({
         filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
       }),
-      new ManifestPlugin({
+      args.ssr && new ManifestPlugin({
         fileName: 'asset-manifest.json',
         writeToFileEmit: true
       }),
