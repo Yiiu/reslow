@@ -29,7 +29,7 @@ export default class Index extends React.Component<any> {
           <h1 className={styles['App-title']}>Welcomes to React</h1>
         </header>
         <br />
-        <Link to="/aaa" className={styles['App-link']}>go /aaa</Link>
+        <Link to="/aaa" className={styles['App-link']}>go /aaas</Link>
         <div className={styles['App-link']}>{ this.props[COUNT_ROUTER].count }</div>
         <button onClick={this.props[COUNT_ROUTER].addCount}>+</button>
         <button onClick={this.props[COUNT_ROUTER].reduceCount}>-</button>

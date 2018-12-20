@@ -9,21 +9,15 @@ type TypeNodeModuleWithHotReload = NodeModule & {hot?: any};
 
 const isDevelop = process.env.NODE_ENV === 'development';
 
-const ReactHotLoader = isDevelop
-  ? require('react-hot-loader').AppContainer
-  : ({ children }: any) => React.Children.only(children);
+// const ReactHotLoader = isDevelop
+//   ? require('react-hot-loader').AppContainer
+//   : ({ children }: any) => React.Children.only(children);
 
 export const render = (Component: typeof App) => {
-  let hydrate: ReactDOM.Renderer;
-  if (process.env.SSR === undefined) {
-    hydrate = ReactDOM.render;
-  } else {
-    hydrate = ReactDOM.hydrate;
-  }
-  hydrate(
-    <ReactHotLoader>
-      <App />
-    </ReactHotLoader>
+  ReactDOM.render(
+    // <ReactHotLoader>
+      <Component />
+    // </ReactHotLoader>
     ,
     document.getElementById('root') as HTMLElement
   );
@@ -32,13 +26,9 @@ const moduleWithHotReload = module as TypeNodeModuleWithHotReload;
 
 if (moduleWithHotReload.hot) {
   moduleWithHotReload.hot.accept(() => {
-    const {App: NewApp} = require('./App.tsx');
+    const { App: NewApp } = require('./App');
     render(NewApp);
   });
-  // moduleWithHotReload.hot.accept('./stores', () => {
-  //   const data = require('./stores');
-  //   console.log(data);
-  // });
 }
 
 render(App);

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import style from './main.css';
 import logo from './logo.svg';
-import style from './App.css';
 
-class App extends Component {
-  render() {
+export default class App extends Component {
+  public render() {
     return (
       <div className={style.App}>
         <header className={style['App-header']}>
@@ -24,5 +24,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
