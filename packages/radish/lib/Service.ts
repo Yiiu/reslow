@@ -42,6 +42,7 @@ export interface IProjectOptions {
   plugins?: string[];
   port?: string;
   host?: string;
+  devPort?: string;
   proxy?: IProxyOptions;
   autoDll: {
     vendor: string[]
