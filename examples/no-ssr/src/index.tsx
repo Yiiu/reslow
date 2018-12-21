@@ -30,5 +30,12 @@ if (moduleWithHotReload.hot) {
     render(NewApp);
   });
 }
+if (!isDevelop) {
+  (function() {
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  })();
+}
 
 render(App);

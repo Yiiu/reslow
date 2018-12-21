@@ -25,6 +25,9 @@ module.exports = {
         .end()
       .use('tslint-loader')
         .loader('tslint-loader')
+        .options({
+          emitErrors: true,
+        })
         .end()
   }
 }
