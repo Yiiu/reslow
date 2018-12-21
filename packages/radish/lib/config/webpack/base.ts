@@ -1,6 +1,7 @@
 import * as CaseSensitivePathPlugin from 'case-sensitive-paths-webpack-plugin';
 import * as FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import * as fs from 'fs';
+import * as HardSourceWebpackPlugin from 'hard-source-webpack-plugin';
 import * as path from 'path';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import * as webpack from 'webpack';
@@ -27,6 +28,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (isServer: boolean, service: Service, args: IArgs) => {
   const { projectOptions } = service;
+  const { hardSource, ssr } = projectOptions;
   const dotenv = getEnv(isServer, projectOptions, '');
 
   const webpackMode = process.env.NODE_ENV;
@@ -37,7 +39,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     context: process.cwd(),
     cache: true,
     output: {
-      publicPath: args.ssr ? '/public/' : '/',
+      publicPath: ssr ? '/public/' : '/',
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
     },
@@ -113,10 +115,11 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         // profile: true,
         name: isServer ? 'server' : 'client',
       }),
+      dev && hardSource && new HardSourceWebpackPlugin(),
       dev && new FriendlyErrorsWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),
       dev && new CaseSensitivePathPlugin(),
-      dev && args.ssr && new WriteFilePlugin({
+      dev && ssr && new WriteFilePlugin({
         exitOnErrors: false,
         log: false,
         // required not to cache removed files

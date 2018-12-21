@@ -1,71 +1,34 @@
 import * as fs from 'fs-extra';
-import * as httpProxyMiddleware from 'http-proxy-middleware';
 import * as _ from 'lodash';
 import * as Config from 'webpack-chain';
 import * as merge from 'webpack-merge';
 
-// import * as commander from 'commander';
 import paths from './config/paths';
-import defaultPptions from './options';
 
+import { getOptions } from './options';
+import DefaultOptions, { AppOptionPlugin } from './options/default';
 import Scripts from './scripts';
-
-export interface IPluginObject {
-  [key: string]: any;
-}
 
 export type Command = 'start' | 'build';
 
-export interface IPluginOptions {
-  isServer: boolean;
-  args: IArgs;
-}
-
-export type AppConfigPlugin<T> = (options: IPluginOptions, webpackConfig: T) => T;
-
-export type ConfigureWebpack = IPluginObject | AppConfigPlugin<IPluginObject>;
 export interface IArgs {
-  ssr?: boolean;
+  spa?: boolean;
   mode?: string;
   open?: boolean;
-}
-
-export interface IProxyOptions {
-  [key: string]: httpProxyMiddleware.Config;
-}
-
-export interface IProjectOptions {
-  configureWebpack?: ConfigureWebpack;
-  clientIndexJs: string;
-  serverIndexJs: string;
-  chainWebpack?: AppConfigPlugin<Config>;
-  plugins?: string[];
-  port?: string;
-  host?: string;
-  devPort?: string;
-  proxy?: IProxyOptions;
-  autoDll: {
-    vendor: string[]
-    polyfills: string[]
-  };
+  analyze?: boolean;
 }
 
 const webpackMerge = merge;
 
 export default class Service {
-  public projectOptions!: IProjectOptions;
-  public webpackChainFns: AppConfigPlugin<Config>[] = [];
-  public webpackRawConfigFns: ConfigureWebpack[] = [];
+  public projectOptions!: DefaultOptions;
+  public webpackChainFns: AppOptionPlugin<Config>[] = [];
+  public webpackRawConfigFns: AppOptionPlugin[] = [];
   public webpackConfig: any;
 
   public script = new Scripts(this);
 
-  constructor() {
-    // this.options = {
-    //   ...options,
-    //   ...this.initOptions
-    // };
-  }
+  constructor() {}
 
   public resolveChainableWebpackConfig (isServer: boolean, args: IArgs) {
     const chainableConfig = new Config();
@@ -89,7 +52,7 @@ export default class Service {
         if (res) {
           config = webpackMerge(config, res);
         }
-      } else if (fn instanceof Object) {
+      } else if ((fn as any) instanceof Object) {
         config = webpackMerge(config, fn);
       }
     });
@@ -103,13 +66,13 @@ export default class Service {
   }
 
   public run = (command: Command, args: IArgs) => {
-    this.projectOptions = this.getUserOptions();
+    this.projectOptions = getOptions(this.getUserOptions(), args);
     if (this.projectOptions.chainWebpack) {
       this.webpackChainFns.push(this.projectOptions.chainWebpack);
     }
     if (this.projectOptions.plugins instanceof Array) {
       this.projectOptions.plugins.forEach((plugin) => {
-        if (typeof(plugin) === 'string') {
+        if (typeof plugin === 'string') {
           const completePluginName = `radish-plugin-${plugin}`;
           const fn = require(`${process.cwd()}/node_modules/${completePluginName}`).default;
           if (fn) {
@@ -117,7 +80,7 @@ export default class Service {
           } else {
             throw new Error(`Unable to find '${completePluginName}`);
           }
-        } else if (typeof(plugin) === 'function') {
+        } else if (typeof plugin === 'function') {
           this.webpackRawConfigFns.push(plugin);
         }
       });
@@ -136,7 +99,7 @@ export default class Service {
     if (fs.existsSync(paths.appConfig)) {
       try {
         const config = require(paths.appConfig);
-        return { ...defaultPptions, ...config };
+        return config;
       } catch (e) {
         console.error('Invalid config.js file.', e);
         process.exit(1);

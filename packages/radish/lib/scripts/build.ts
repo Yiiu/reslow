@@ -20,7 +20,6 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 export default async (service: Service, args: IArgs) => {
-
   const fileSizes = await measureFileSizesBeforeBuild(paths.appBuild);
   fs.emptyDirSync(paths.appBuild);
   build(fileSizes, service, args)
@@ -65,6 +64,8 @@ export default async (service: Service, args: IArgs) => {
 const build = async (
   previousFileSizes: any, service: Service, args: IArgs,
 ): Promise<any> => {
+  const { projectOptions } = service;
+  const { ssr } = projectOptions;
 
   const clientConfig = clientWebpackConfig(service, args);
   const serverConfig = serverWebpackConfig(service, args);
@@ -73,7 +74,7 @@ const build = async (
   const promiseArr = [
     webpackCompiler(clientMultiCompiler)
   ];
-  if (args.ssr) {
+  if (ssr) {
     promiseArr.push(webpackCompiler(serverMultiCompiler));
   }
   const [data] = await Promise.all(promiseArr);

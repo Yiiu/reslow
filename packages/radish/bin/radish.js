@@ -14,14 +14,14 @@ program
     process.env.NODE_ENV = 'production';
     const Service = require('../build/lib/Service').default;
     const service = new Service();
-    service.create(name, args)
+    service.create(name)
   })
 
 program
   .command('start')
   .description('run dev server')
-  .option("-m, --mode <mode>", "specify env mode")
-  .option("-s, --ssr", "use server render")
+  // .option("-m, --mode <mode>", "specify env mode")
+  .option("-s, --spa", "SPA mode and disables server side rendering")
   .option("-o, --open", "open browser on server start")
   .action((args) => {
     process.env.NODE_ENV = 'development';
@@ -33,8 +33,9 @@ program
 program
   .command('build')
   .description('run build')
-  .option("-m, --mode <mode>", "Which start mode to use")
-  .option("-s, --ssr", "Use ssr")
+  // .option("-m, --mode <mode>", "Which start mode to use")
+  .option("-s, --spa", "SPA mode and disables server side rendering")
+  .option("-a, --analyze", "launch the bundle analyzer")
   .action((args) => {
     process.env.NODE_ENV = 'production';
     const Service = require('../build/lib/Service').default;

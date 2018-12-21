@@ -1,4 +1,4 @@
-import { IProjectOptions } from '../Service';
+import Options from '../options/default';
 import paths from './paths';
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -10,7 +10,7 @@ if (!NODE_ENV) {
 
 const REACT_APP = /^REACT_APP_/i;
 
-export const getEnv = (isServer: boolean, options: IProjectOptions, publicUrl: string) => {
+export const getEnv = (isServer: boolean, options: Options, publicUrl: string) => {
   const raw = Object.keys(process.env)
     .filter(key => REACT_APP.test(key))
     .reduce(
@@ -20,9 +20,9 @@ export const getEnv = (isServer: boolean, options: IProjectOptions, publicUrl: s
       },
       {
         NODE_ENV: process.env.NODE_ENV,
-        PORT: process.env.PORT || options.port || '3000',
-        HOST: process.env.HOST || options.host || 'localhost',
-        SSR: process.env.SSR,
+        PORT: options.port,
+        HOST: options.host,
+        SSR: String(options.ssr),
         BUILD_TARGET: isServer ? 'server' : 'client',
         CLIENT_PUBLIC_PATH: process.env.CLIENT_PUBLIC_PATH,
         PUBLIC_URL: publicUrl,
@@ -37,7 +37,7 @@ export const getEnv = (isServer: boolean, options: IProjectOptions, publicUrl: s
     'process.env': Object.keys(process.env).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
       return env;
-    },                                             {} as NodeJS.ProcessEnv),
+    }, {} as NodeJS.ProcessEnv),
   };
   return {
     stringified,

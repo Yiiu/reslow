@@ -15,11 +15,12 @@ export default async (service: Service, args: IArgs) => {
   const clientCompiler = webpack(clientConfig as any);
   const serverCompiler = webpack(serverConfig as any);
 
-  if (args.ssr) {
+  if (projectOptions.ssr) {
     serverCompiler.watch({}, () => {});
   }
+
   const clientDevServer = new DevServer(clientCompiler, (clientConfig as any).devServer);
-  clientDevServer.listen(args.ssr ? projectOptions.devPort : projectOptions.port, (err: any) => {
+  clientDevServer.listen(projectOptions.devPort, (err: any) => {
     if (err) {
       console.error(chalk.red(err));
     }

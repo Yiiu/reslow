@@ -1,11 +1,11 @@
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
-// import * as HardSourceWebpackPlugin  from 'hard-source-webpack-plugin';
 import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as OptimizeCssAssetsWebpackPlugin from 'optimize-css-assets-webpack-plugin';
 import * as path from 'path';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
 import * as SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import * as ManifestPlugin from 'webpack-manifest-plugin';
 import * as merge from 'webpack-merge';
 
@@ -24,10 +24,10 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { host, port, clientIndexJs, autoDll, devPort, proxy } = projectOptions;
+  const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr } = projectOptions;
   const clientConfig = {
     entry: [
-      dev && `webpack-dev-server/client?http://${host}:${args.ssr ? devPort : port}`,
+      dev && `webpack-dev-server/client?http://${host}:${devPort}`,
       dev && 'webpack/hot/only-dev-server',
       dev && 'react-hot-loader/patch',
       clientIndexJs
@@ -40,6 +40,7 @@ export default (service: Service, args: IArgs) => {
     },
     devServer: {
       proxy,
+      quiet: true,
       compress: true,
       host: process.env.HOST,
       port: devPort,
@@ -57,7 +58,7 @@ export default (service: Service, args: IArgs) => {
       overlay: true,
       clientLogLevel: 'none',
       contentBase: paths.appBuildSrc,
-      publicPath: args.ssr ? '/__server' : '/',
+      publicPath: ssr ? '/__server' : '/',
       before(app: any) {
         app.use(errorOverlayMiddleware());
       },
@@ -71,14 +72,14 @@ export default (service: Service, args: IArgs) => {
           }
         }
       }),
-      !args.ssr && new HtmlWebpackPlugin({
+      !ssr && new HtmlWebpackPlugin({
         inject: true,
         template: paths.appHtml,
       }),
-      !args.ssr && new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
+      !ssr && new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
         PUBLIC_URL: ''
       }),
-      dev && args.ssr && new AutoDllPlugin({
+      dev && ssr && new AutoDllPlugin({
         debug: true,
         inject: true,
         filename: '[name].js',
@@ -87,11 +88,10 @@ export default (service: Service, args: IArgs) => {
           polyfills: autoDll.polyfills || [],
         }
       }),
-      // dev && new HardSourceWebpackPlugin(),
-      args.ssr && new ReactLoadablePlugin({
+      ssr && new ReactLoadablePlugin({
         filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
       }),
-      args.ssr && new ManifestPlugin({
+      ssr && new ManifestPlugin({
         fileName: 'asset-manifest.json',
         writeToFileEmit: true
       }),
@@ -108,6 +108,10 @@ export default (service: Service, args: IArgs) => {
         filename: 'service-worker.js',
         minify: true,
       } as any),
+      analyze && new BundleAnalyzerPlugin({
+        defaultSizes: 'gzip',
+        generateStatsFile: true,
+      }),
       new ModuleNotFoundPlugin(paths.appPath),
       new CaseSensitivePathsPlugin(),
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
