@@ -91,8 +91,8 @@ export default class Service {
     this.script.run(command, args);
   }
 
-  public create = (projectName: string) => {
-    this.script.create(projectName);
+  public create = (projectName: string, args: IArgs) => {
+    this.script.create(projectName, args);
   }
 
   public getUserOptions = () => {

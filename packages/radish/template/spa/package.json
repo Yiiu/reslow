@@ -1,11 +1,12 @@
 {
-  "name": "radish-basic",
+  "name": "radish-no-ssr",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "radish start -s",
-    "start:server": "radish start -s"
+    "start": "radish start",
+    "build": "radish build",
+    "server": "serve __server"
   },
   "author": "",
   "license": "ISC",

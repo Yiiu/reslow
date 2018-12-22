@@ -23,7 +23,7 @@ export default class Script {
     build(this.service, args);
   }
 
-  public create = (projectName: string) => {
-    create(projectName);
+  public create = (projectName: string, args: IArgs) => {
+    create(projectName, args);
   }
 }

@@ -9,12 +9,13 @@ program
 
 program
   .command('create <project-name>')
+  .option("-s, --spa", "SPA mode and disables server side rendering")
   .description('run dev create')
   .action((name, args) => {
     process.env.NODE_ENV = 'production';
     const Service = require('../build/lib/Service').default;
     const service = new Service();
-    service.create(name)
+    service.create(name, args);
   })
 
 program

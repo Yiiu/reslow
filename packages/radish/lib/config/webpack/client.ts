@@ -44,9 +44,6 @@ export default (service: Service, args: IArgs) => {
       compress: true,
       host: process.env.HOST,
       port: devPort,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
       historyApiFallback: {
         disableDotRule: true
       },

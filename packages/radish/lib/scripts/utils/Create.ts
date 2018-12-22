@@ -8,6 +8,7 @@ const cwd = process.cwd();
 
 export interface ICreateOptions {
   template?: string;
+  spa?: boolean;
 }
 
 export default class Create {
@@ -32,7 +33,24 @@ export default class Create {
     this.inCurrent = projectName === '.';
     this.name = this.inCurrent ? path.relative('../', cwd) : projectName;
     this.targetDir = path.resolve(cwd, projectName || '.');
-    this.templatePath = this.options.template || path.resolve(__dirname, '../../../../template');
+    this.getTemplatePath();
+  }
+
+  public getTemplatePath = () => {
+    const dir = path.join(__dirname, '../../../../');
+    if (this.options.template) {
+      this.templatePath = this.options.template;
+    } else {
+      if (this.options.spa) {
+        this.templatePath = path.join(dir, 'template/spa');
+      } else {
+        this.templatePath = path.join(dir, 'template/default');
+      }
+    }
+    if (!fs.existsSync(this.templatePath)) {
+      console.error(`\n ${chalk.red('no template')} \n`);
+      process.exit(1);
+    }
   }
 
   public create = async () => {
@@ -136,16 +154,19 @@ export default class Create {
   }
 
   public getInstallPackage = () => {
-    const allDependencies = [
+    let allDependencies = [
       '@types/react',
       '@types/react-dom',
-      '@types/express',
       'react-dom',
       'react',
       'radish-server',
-      'express',
       'react-hot-loader',
     ];
+    if (!this.options.spa) {
+      allDependencies = allDependencies.concat(['@types/express', 'express']);
+    } else {
+      allDependencies.unshift('@types/node');
+    }
     return allDependencies;
   }
 }
