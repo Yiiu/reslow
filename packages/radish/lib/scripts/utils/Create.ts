@@ -9,6 +9,7 @@ const cwd = process.cwd();
 export interface ICreateOptions {
   template?: string;
   spa?: boolean;
+  plugin?: boolean;
 }
 
 export default class Create {
@@ -45,6 +46,9 @@ export default class Create {
         this.templatePath = path.join(dir, 'template/spa');
       } else {
         this.templatePath = path.join(dir, 'template/default');
+      }
+      if (this.options.plugin) {
+        this.templatePath = path.join(dir, 'template/plugin');
       }
     }
     if (!fs.existsSync(this.templatePath)) {
@@ -109,7 +113,10 @@ export default class Create {
     let args: string[];
     if (useYarn) {
       command = 'yarnpkg';
-      args = ['add', '--exact'];
+      args = ['add'];
+      if (dependencies.length > 0) {
+        args.push('--exact');
+      }
       args = [...args, ...dependencies];
       args.push('--cwd');
       args.push(targetDir);
@@ -166,6 +173,9 @@ export default class Create {
       allDependencies = allDependencies.concat(['@types/express', 'express']);
     } else {
       allDependencies.unshift('@types/node');
+    }
+    if (this.options.plugin) {
+      return [];
     }
     return allDependencies;
   }

@@ -10,6 +10,7 @@ program
 program
   .command('create <project-name>')
   .option("-s, --spa", "SPA mode and disables server side rendering")
+  .option("-p, --plugin", "plugin template")
   .description('run dev create')
   .action((name, args) => {
     process.env.NODE_ENV = 'production';

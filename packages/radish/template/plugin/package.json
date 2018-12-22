@@ -1,10 +1,10 @@
 {
-  "name": "radish-plugin-tslint",
-  "version": "0.0.25",
+  "name": "radish-plugin-",
+  "version": "0.0.1",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
   "license": "MIT",
-  "description": "radish-plugin-tslint",
+  "description": "radish-plugin-",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "scripts": {
@@ -19,11 +19,6 @@
     "radish"
   ],
   "dependencies": {
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-loader": "^3.5.4",
-    "tslint-react": "^3.6.0",
     "typescript": "^3.1.4"
-  },
-  "gitHead": "fe1c5445f53c5672f38e90974f6fc9f5416f84b2"
+  }
 }

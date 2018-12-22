@@ -16,6 +16,7 @@ export interface IArgs {
   mode?: string;
   open?: boolean;
   analyze?: boolean;
+  plugin?: boolean;
 }
 
 const webpackMerge = merge;
@@ -48,10 +49,7 @@ export default class Service {
     config = webpackMerge(webpackConfig, original);
     this.webpackRawConfigFns.forEach((fn) => {
       if (typeof fn === 'function') {
-        const res = (fn as any)({ isServer, args }, config);
-        if (res) {
-          config = webpackMerge(config, res);
-        }
+        config = (fn as any)({ isServer, args }, config);
       } else if ((fn as any) instanceof Object) {
         config = webpackMerge(config, fn);
       }
