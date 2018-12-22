@@ -15,9 +15,9 @@
     "@types/react": "16.7.17",
     "@types/react-dom": "16.0.11",
     "express": "4.16.4",
-    "radish-server": "0.2.1",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "radish-server": "latest",
+    "react": "next",
+    "react-dom": "next",
     "react-hot-loader": "4.6.3"
   }
 }
