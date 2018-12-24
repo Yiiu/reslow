@@ -1,9 +1,14 @@
 {
   "packages": [
-    "packages/*"
+    "packages/*",
+    "plugins/*",
+    "examples/*"
   ],
-  "publishConfig": {
-    "access": "public"
+  "command": {
+    "bootstrap": {
+      "hoist": true,
+      "nohoist": "express"
+    }
   },
   "version": "independent"
 }

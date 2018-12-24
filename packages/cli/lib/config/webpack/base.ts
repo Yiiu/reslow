@@ -62,9 +62,9 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
-      alias: {
-        'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client'),
-      },
+      // alias: {
+      //   'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client'),
+      // },
       modules: [
         path.resolve(__dirname, '../../../../node_modules'),
         paths.appNodeModules,

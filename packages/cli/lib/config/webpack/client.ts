@@ -40,10 +40,11 @@ export default (service: Service, args: IArgs) => {
     },
     devServer: {
       proxy,
-      quiet: true,
-      compress: true,
-      host: process.env.HOST,
+      host,
       port: devPort,
+      compress: true,
+      quiet: true,
+      disableHostCheck: true,
       historyApiFallback: {
         disableDotRule: true
       },

@@ -1,11 +1,12 @@
 {
-  "name": "radish-basic",
+  "name": "reslow-with-proxy",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "radish start -s",
-    "start:server": "radish start -s"
+    "start": "reslow start",
+    "build": "reslow build"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +16,7 @@
     "@types/react-dom": "16.0.9",
     "express": "4.16.4",
     "http-proxy-middleware": "^0.19.1",
-    "radish-server": "latest",
+    "@reslow/cli": "latest",
     "react": "next",
     "react-dom": "next",
     "react-hot-loader": "4.3.11"

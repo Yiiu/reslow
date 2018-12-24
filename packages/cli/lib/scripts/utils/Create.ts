@@ -166,7 +166,7 @@ export default class Create {
       '@types/react-dom',
       'react-dom',
       'react',
-      'radish-server',
+      '@reslow/cli',
       'react-hot-loader',
     ];
     if (!this.options.spa) {

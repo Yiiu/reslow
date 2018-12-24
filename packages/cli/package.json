@@ -2,12 +2,12 @@
   "name": "@reslow/cli",
   "version": "0.2.6",
   "description": "Create server-rendered react applications",
-  "repository": "git@github.com:yiiu/radish.git",
+  "repository": "git@github.com:yiiu/reslow.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "radish": "./bin/radish.js"
+    "reslow": "./bin/reslow.js"
   },
   "files": [
     "bin",

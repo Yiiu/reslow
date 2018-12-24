@@ -1,11 +1,11 @@
 {
-  "name": "radish-basic",
+  "name": "reslow-basic",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "radish start",
-    "build": "radish build",
+    "start": "reslow start",
+    "build": "reslow build",
     "server": "node __server/server/server.js"
   },
   "author": "",

@@ -2,7 +2,6 @@
 
 'use strict';
 const program = require('commander');
-const chalk = require('chalk');
 
 program
   .version(require('../package.json').version)

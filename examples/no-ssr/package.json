@@ -1,11 +1,11 @@
 {
-  "name": "radish-basic",
+  "name": "reslow-basic",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "radish start",
-    "build": "radish build",
+    "dev": "reslow start",
+    "build": "reslow build",
     "start": "serve __server"
   },
   "author": "",
@@ -15,7 +15,7 @@
     "@types/react": "16.7.17",
     "@types/react-dom": "16.0.11",
     "express": "4.16.4",
-    "radish-server": "latest",
+    "@reslow/cli": "latest",
     "react": "next",
     "react-dom": "next",
     "react-hot-loader": "4.6.3"
