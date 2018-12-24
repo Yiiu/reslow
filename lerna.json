@@ -5,6 +5,9 @@
     "examples/*"
   ],
   "command": {
+    "publish": {
+      "ignoreChanges": ["examples/*"]
+    },
     "bootstrap": {
       "hoist": true,
       "nohoist": "express"
