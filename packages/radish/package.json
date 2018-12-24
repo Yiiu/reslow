@@ -1,5 +1,5 @@
 {
-  "name": "@radish/cli",
+  "name": "@reslow/cli",
   "version": "0.2.6",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/radish.git",
@@ -108,5 +108,8 @@
     "tslint-config-prettier": "^1.15.0",
     "tslint-react": "^3.6.0"
   },
-  "gitHead": "1bb9fd1e3ba07742536d804d85d24c51a695480d"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "18ba18f682d99946374290f86d9095bc0b440dbc"
 }
