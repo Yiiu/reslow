@@ -27,7 +27,7 @@
     "node_modules",
     "__server",
     "build",
-    "__server"
+    "config.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

@@ -29,6 +29,7 @@
     "scripts",
     "webpack",
     "jest",
+    "__server",
     "config.js"
   ],
   "types": ["typePatches", "node", "webpack-env"]

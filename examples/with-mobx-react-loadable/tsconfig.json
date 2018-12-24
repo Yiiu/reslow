@@ -31,8 +31,6 @@
   "exclude": [
     "node_modules",
     "build",
-    // "__server",
-    // "config.js",
     "scripts",
     "acceptance-tests",
     "webpack",
