@@ -1,6 +1,6 @@
 {
   "name": "@reslow/plugin-tslint",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "repository": "git@github.com:yiiu/reslow.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
   "license": "MIT",
