@@ -62,6 +62,8 @@ typings/
 
 build/
 
+examples/*/package-lock.json
+
 __server
 
 yarn.lock

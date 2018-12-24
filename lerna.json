@@ -9,7 +9,6 @@
       "ignoreChanges": ["examples/*"]
     },
     "bootstrap": {
-      "hoist": true,
       "nohoist": "express"
     }
   },
