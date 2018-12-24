@@ -1,8 +1,9 @@
 {
-  "name": "radish-basic",
+  "name": "reslow-with-tslint",
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "reslow start -s",
     "start:server": "reslow start -s"
