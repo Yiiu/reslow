@@ -1,6 +1,6 @@
 {
   "name": "@radish/cli",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/radish.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
