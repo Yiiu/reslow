@@ -22,6 +22,7 @@ export default class Options {
   public analyze = false;
   public port = '3000';
   public devPort = '3001';
+  public noTs = false;
   public autoDll = {
     vendor: ['react-dom', 'react'],
     polyfills: []

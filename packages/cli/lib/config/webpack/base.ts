@@ -28,7 +28,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (isServer: boolean, service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { hardSource, ssr } = projectOptions;
+  const { hardSource, ssr, noTs } = projectOptions;
   const dotenv = getEnv(isServer, projectOptions, '');
 
   const webpackMode = process.env.NODE_ENV;
@@ -73,10 +73,10 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         nodePath.split(path.delimiter).filter(Boolean),
       ),
       plugins: [
-        new TsconfigPathsPlugin({
-          // configFile: paths.appTsconfig
+        !noTs && new TsconfigPathsPlugin({
+          configFile: paths.appTsconfig
         }),
-      ],
+      ].filter(Boolean),
     },
     module: {
       rules: [
