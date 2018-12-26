@@ -1,6 +1,6 @@
 {
   "name": "reslow-with-mobx-react-loadable",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@reslow/cli": "latest",
