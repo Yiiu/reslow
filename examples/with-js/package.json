@@ -1,0 +1,20 @@
+{
+  "name": "reslow-with-js",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "reslow start",
+    "build": "reslow build",
+    "server": "node __server/server/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.16.4",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "react-hot-loader": "4.6.3"
+  }
+}
