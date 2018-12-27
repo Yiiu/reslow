@@ -9,6 +9,7 @@ import * as WebpackBar from 'webpackbar';
 
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 
 import paths from '../paths';
 
@@ -115,6 +116,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         // profile: true,
         name: isServer ? 'server' : 'client',
       }),
+      new ModuleNotFoundPlugin(paths.appPath),
       dev && hardSource && new HardSourceWebpackPlugin(),
       dev && new FriendlyErrorsWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),

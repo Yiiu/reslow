@@ -12,5 +12,16 @@
       "nohoist": "express"
     }
   },
+  "changelog": {
+    "repo": "yiiu/reslow",
+    "labels": {
+      "breaking": ":boom: Breaking Change",
+      "enhancement": ":rocket: Enhancement",
+      "bug": ":bug: Bug Fix",
+      "documentation": ":memo: Documentation",
+      "internal": ":house: Internal"
+    },
+    "cacheDir": ".changelog"
+  },
   "version": "independent"
 }

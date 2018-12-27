@@ -16,6 +16,8 @@ import baseConfig from './base';
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
+const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
+const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
@@ -24,7 +26,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr } = projectOptions;
+  const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr, quiet } = projectOptions;
   const clientConfig = {
     entry: [
       dev && `webpack-dev-server/client?http://${host}:${devPort}`,
@@ -43,7 +45,7 @@ export default (service: Service, args: IArgs) => {
       host,
       port: devPort,
       compress: true,
-      quiet: true,
+      quiet: !!quiet,
       disableHostCheck: true,
       historyApiFallback: {
         disableDotRule: true
@@ -53,12 +55,22 @@ export default (service: Service, args: IArgs) => {
       },
       inline: true,
       hot: true,
-      overlay: true,
+      overlay: false,
       clientLogLevel: 'none',
       contentBase: paths.appBuildSrc,
       publicPath: ssr ? '/__server' : '/',
-      before(app: any) {
+      before(app: any, server: any) {
+        // This lets us fetch source contents from webpack for the error overlay
+        app.use(evalSourceMapMiddleware(server));
+        // This lets us open files from the runtime error overlay.
         app.use(errorOverlayMiddleware());
+
+        // This service worker file is effectively a 'no-op' that will reset any
+        // previous service worker registered for the same host:port combination.
+        // We do this in development to avoid hitting the production cache if
+        // it used the same host and port.
+        // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
+        app.use(noopServiceWorkerMiddleware());
       },
     },
     plugins: [
