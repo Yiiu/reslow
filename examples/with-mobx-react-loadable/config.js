@@ -1,3 +1,5 @@
+const tslintPlugin = require('@reslow/plugin-tslint').default;
+
 module.exports = {
   serverIndexJs: './src/server.ts',
   clientIndexJs: './src/app/index.tsx',
@@ -12,22 +14,7 @@ module.exports = {
       'history'
     ]
   },
-  // plugins: [
-  //   'tslint'
-  // ],
-  chainWebpack(_, config) {
-    config.module
-      .rule('tslint')
-      .test(/\.tsx?$/)
-      .pre()
-      .exclude
-        .add(/node_modules/)
-        .end()
-      .use('tslint-loader')
-        .loader('tslint-loader')
-        .options({
-          emitErrors: true,
-        })
-        .end()
-  }
+  plugins: [
+    tslintPlugin()
+  ]
 }
