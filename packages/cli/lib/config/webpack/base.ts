@@ -29,7 +29,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (isServer: boolean, service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { hardSource, ssr, noTs } = projectOptions;
+  const { hardSource, ssr, noTs, host, port } = projectOptions;
   const dotenv = getEnv(isServer, projectOptions, '');
 
   const webpackMode = process.env.NODE_ENV;
@@ -110,15 +110,8 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       }),
       new webpack.DefinePlugin(dotenv.stringified),
       new webpack.NamedModulesPlugin(),
-      new WebpackBar({
-        minimal: false,
-        compiledIn: false,
-        // profile: true,
-        name: isServer ? 'server' : 'client',
-      }),
       new ModuleNotFoundPlugin(paths.appPath),
       dev && hardSource && new HardSourceWebpackPlugin(),
-      dev && new FriendlyErrorsWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),
       dev && new CaseSensitivePathPlugin(),
       dev && ssr && new WriteFilePlugin({
@@ -126,6 +119,18 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         log: false,
         // required not to cache removed files
         useHashIndex: false,
+      }),
+      new WebpackBar({
+        minimal: false,
+        compiledIn: false,
+        // profile: true,
+        name: isServer ? 'server' : 'client',
+      }),
+      dev && new FriendlyErrorsWebpackPlugin({
+        compilationSuccessInfo: {
+          messages: [`Your application is running at at http://${host}:${port}`],
+          notes: []
+        },
       }),
     ].filter(Boolean)
   };

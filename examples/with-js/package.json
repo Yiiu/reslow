@@ -7,7 +7,7 @@
   "scripts": {
     "start": "reslow start",
     "build": "reslow build",
-    "server": "node __server/server/server.js"
+    "server": "node .reslow/server/server.js"
   },
   "author": "",
   "license": "ISC",

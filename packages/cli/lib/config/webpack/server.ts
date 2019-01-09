@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as webpack from 'webpack';
 import * as merge from 'webpack-merge';
 
@@ -24,7 +23,7 @@ export default (service: Service, args: IArgs) => {
       __filename: false,
     },
     output: {
-      path: path.join(paths.appBuildSrc, 'server'),
+      path: paths.appBuildSrc,
       filename: 'server.js',
       libraryTarget: 'commonjs2',
       chunkFilename: '[name].[contenthash].js'

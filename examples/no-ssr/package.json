@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "reslow start",
     "build": "reslow build",
-    "start": "serve __server"
+    "start": "serve .reslow"
   },
   "author": "",
   "license": "ISC",

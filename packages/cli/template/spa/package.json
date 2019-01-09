@@ -6,7 +6,7 @@
   "scripts": {
     "start": "radish start",
     "build": "reslow build",
-    "server": "serve __server"
+    "server": "serve .reslow"
   },
   "author": "",
   "license": "ISC",

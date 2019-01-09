@@ -58,7 +58,7 @@ export default (service: Service, args: IArgs) => {
       overlay: false,
       clientLogLevel: 'none',
       contentBase: paths.appBuildSrc,
-      publicPath: ssr ? '/__server' : '/',
+      publicPath: ssr ? '/.reslow' : '/',
       before(app: any, server: any) {
         // This lets us fetch source contents from webpack for the error overlay
         app.use(evalSourceMapMiddleware(server));

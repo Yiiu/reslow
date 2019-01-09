@@ -5,6 +5,8 @@
     "lerna": "^3.4.3"
   },
   "scripts": {
-    "install": "lerna bootstrap"
+    "install": "lerna bootstrap",
+    "package:dev": "lerna run --parallel --no-private dev",
+    "package:build": "lerna run --parallel --no-private build"
   }
 }

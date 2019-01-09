@@ -37,8 +37,8 @@ Loadable.preloadAll().then(() => {
   });
 });
 
-app.use(favicon(path.join(resolveApp('__server/favicon.ico'))));
-app.use('/public', express.static(resolveApp('__server')));
+app.use(favicon(path.join(process.env.APP_PUBLIC_DIR as any, '/favicon.ico')));
+app.use('/public', express.static(process.env.APP_PUBLIC_DIR as any));
 app.get('*', async (req, res) => {
   res.send(await serverRender(req));
 });
