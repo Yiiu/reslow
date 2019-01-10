@@ -1,4 +1,5 @@
 import * as CaseSensitivePathPlugin from 'case-sensitive-paths-webpack-plugin';
+import * as ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin-alt';
 import * as FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import * as fs from 'fs';
 import * as HardSourceWebpackPlugin from 'hard-source-webpack-plugin';
@@ -10,6 +11,7 @@ import * as WebpackBar from 'webpackbar';
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 import paths from '../paths';
 
@@ -131,6 +133,13 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
           messages: [`Your application is running at at http://${host}:${port}`],
           notes: []
         },
+        clearConsole: false,
+      }),
+      !noTs && new ForkTsCheckerWebpackPlugin({
+        async: false,
+        silent: true,
+        checkSyntacticErrors: true,
+        formatter: typescriptFormatter,
       }),
     ].filter(Boolean)
   };

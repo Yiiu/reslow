@@ -1,14 +1,10 @@
 
 import * as express from 'express';
-import * as fs from 'fs';
 import * as path from 'path';
 import * as Loadable from 'react-loadable';
 import * as favicon from 'serve-favicon';
 
 let serverRender = require('./serverRender').default;
-
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
 const app = express();
 

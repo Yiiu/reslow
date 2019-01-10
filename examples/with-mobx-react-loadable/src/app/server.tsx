@@ -37,7 +37,7 @@ export default (req: Request, stats: IStats, manifest: IManifest) => {
       </Provider>
     </StaticRouter>
   );
-  const bundles = getBundles(stats, modules);
+  const bundles = getBundles((stats as any), modules);
   const js = bundles
     .filter(bundle => bundle && bundle.file.endsWith('.js'))
     .map(bundle => {

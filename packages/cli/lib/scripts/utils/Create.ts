@@ -4,6 +4,8 @@ import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
 import * as path from 'path';
 
+import { promiseLogger } from '../../utils/promiseLogger';
+
 const cwd = process.cwd();
 
 export interface ICreateOptions {
@@ -57,14 +59,23 @@ export default class Create {
     }
   }
 
+  public copyTemplate = async () => {
+    const { targetDir, templatePath } = this;
+    // console.log(targetDir);
+    await fs.emptyDir(targetDir);
+    await fs.copy(templatePath, targetDir);
+  }
+
   public create = async () => {
     const { targetDir } = this;
     console.log(`\n Creating a new React app in ${chalk.green(targetDir)}. \n`);
-    await this.ensureDir();
+    await promiseLogger(await this.ensureDir(), 'Check the create folder.');
+    await promiseLogger(this.copyTemplate(), 'Copy template folder.');
+    this.installModules();
   }
 
   public ensureDir = async () => {
-    const { targetDir, templatePath, name, inCurrent } = this;
+    const { targetDir, name, inCurrent } = this;
     if (fs.existsSync(targetDir)) {
       console.log(
         ` Uh oh! Looks like there's already a directory called ${chalk.red(
@@ -91,9 +102,6 @@ export default class Create {
         }
       }
     }
-    fs.emptyDirSync(targetDir);
-    fs.copySync(templatePath, targetDir);
-    this.installModules();
   }
 
   public shouldUseYarn = () => {
