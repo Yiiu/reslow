@@ -1,5 +1,6 @@
 
 import * as express from 'express';
+import * as http from 'http';
 import * as path from 'path';
 import * as Loadable from 'react-loadable';
 import * as favicon from 'serve-favicon';
@@ -8,11 +9,13 @@ let serverRender = require('./serverRender').default;
 
 const app = express();
 
-if ((module as any).hot) {
-  (module as any).hot.accept(() => {
+const httpServer = http.createServer(app);
+
+if (module.hot) {
+  module.hot.accept(() => {
     console.log('🔁  HMR Reloading...');
   });
-  (module as any).hot.accept('./serverRender', () => {
+  module.hot.accept('./serverRender', () => {
     console.log('🔁  HMR Reloading `./serverRender`...');
     try {
       serverRender = require('./serverRender').default;
@@ -24,11 +27,11 @@ if ((module as any).hot) {
 }
 
 Loadable.preloadAll().then(() => {
-  app.listen(process.env.PORT as any, process.env.HOST as any, (err: any) => {
+  httpServer.listen(process.env.PORT as any, process.env.HOST as any, (err: any) => {
     if (err) {
       console.error(err);
     } else {
-      console.info(`\n\n 💂  Listening at http://${process.env.HOST}:${process.env.PORT}\n`);
+      console.info(`\n\n 💂 Listening at http://${process.env.HOST}:${process.env.PORT}\n`);
     }
   });
 });

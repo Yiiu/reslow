@@ -77,7 +77,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       ),
       plugins: [
         !noTs && new TsconfigPathsPlugin({
-          configFile: paths.appTsconfig
+          configFile: paths.appTsConfig
         }),
       ].filter(Boolean),
     },
@@ -136,10 +136,19 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         clearConsole: false,
       }),
       !noTs && new ForkTsCheckerWebpackPlugin({
-        async: false,
-        silent: true,
+        // silent: true,
+        reportFiles: [
+          '**',
+          '!**/*.json',
+          '!**/__tests__/**',
+          '!**/?(*.)(spec|test).*',
+          '!**/src/setupProxy.*',
+          '!**/src/setupTests.*',
+        ],
+        watch: paths.appSrc,
         checkSyntacticErrors: true,
         formatter: typescriptFormatter,
+        tsconfig: paths.appTsConfig,
       }),
     ].filter(Boolean)
   };
