@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-// import * as requireFromString from 'require-from-string';
-// import * as WebpackHotMiddleware from 'webpack-hot-middleware';
 
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -18,7 +16,7 @@ export default async (req: any) => {
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta charSet='utf-8' />
-        <title>Welcome to Razzle</title>
+        <title>Welcome to React</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         ${
           assets['main.css']

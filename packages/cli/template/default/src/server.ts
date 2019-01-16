@@ -5,11 +5,11 @@ let serverRender = require('./serverRender.tsx').default;
 
 const app = express.default();
 
-if ((module as any).hot) {
-  (module as any).hot.accept(() => {
+if (module.hot) {
+  module.hot.accept(() => {
     console.log('🔁  HMR Reloading...');
   });
-  (module as any).hot.accept('./serverRender', () => {
+  module.hot.accept('./serverRender', () => {
     console.log('🔁  HMR Reloading `./serverRender`...');
     try {
       serverRender = require('./serverRender').default;
