@@ -6,7 +6,8 @@
   "scripts": {
     "start": "reslow start",
     "build": "reslow build",
-    "server": "node .reslow/server/server.js"
+    "start:prod": "node .reslow/server.js",
+    "now-start": "yarn start:prod"
   },
   "author": "",
   "license": "ISC",
