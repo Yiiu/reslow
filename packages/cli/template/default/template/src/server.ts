@@ -1,10 +1,14 @@
-
-import * as express from 'express';
-
+<% if (framework === 'koa') { %>import Koa from 'koa';
+import serve from 'koa-static';
+import mount from 'koa-mount';
+import helmet from 'koa-helmet';
+import Router from 'koa-router';
+<% } else if (framework === 'express') { %>import * as express from 'express';
+<% } %>
 let serverRender = require('./serverRender.tsx').default;
-
-const app = express.default();
-
+<% if (framework === 'koa') { %>const router = new Router();
+<% } else if (framework === 'express') { %>const app = express.default();
+<% } %>
 if (module.hot) {
   module.hot.accept(() => {
     console.log('🔁  HMR Reloading...');
@@ -20,7 +24,14 @@ if (module.hot) {
   console.info('✅  Server-side HMR Enabled!');
 }
 
-app.listen(process.env.PORT as any, process.env.HOST as any, (err: any) => {
+<% if (framework === 'koa') { %>const app = new Koa();
+app
+  .use(helmet())
+  .use(mount('/public', serve(process.env.APP_PUBLIC_DIR!)))
+  .use(router.routes())
+  .use(router.allowedMethods())
+  .listen(process.env.PORT);
+<% } else if (framework === 'express') { %>app.listen(process.env.PORT as any, process.env.HOST as any, (err: any) => {
   if (err) {
     console.error(err);
   } else {
@@ -31,3 +42,4 @@ app.use('/public', express.static(process.env.APP_PUBLIC_DIR as any));
 app.get('*', async (req: express.Request, res: express.Response) => {
   res.send(await serverRender(req));
 });
+<% } %>

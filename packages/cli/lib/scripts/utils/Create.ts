@@ -2,16 +2,41 @@ import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
+import { template } from 'lodash';
 import * as path from 'path';
 
 import { promiseLogger } from '../../utils/promiseLogger';
+import * as i18n from './i18n';
 
-const cwd = process.cwd();
+type Framework = 'koa' | 'express';
+type Language = 'zhCn' | 'en';
+
+interface ITemplateArgs {
+  framework: Framework;
+}
 
 export interface ICreateOptions {
   template?: string;
   spa?: boolean;
   plugin?: boolean;
+}
+
+const cwd = process.cwd();
+
+const WHITESPACE_REPLACEMENTS = [
+  [/[ \t\f\r]+\n/g, '\n'], // strip empty indents
+  [/{\n{2,}/g, '{\n'], // strip start padding from blocks
+  [/\n{2,}([ \t\f\r]*})/g, '\n$1'], // strip end padding from blocks
+  [/\n{3,}/g, '\n\n'], // strip multiple blank lines (1 allowed)
+  [/\n{2,}$/g, '\n'] // strip blank lines EOF (0 allowed)
+];
+
+function stripWhitespace(string: any) {
+  let newString = string;
+  WHITESPACE_REPLACEMENTS.forEach(([regex, newSubstr]) => {
+    newString = string.replace(regex, newSubstr);
+  });
+  return newString;
 }
 
 export default class Create {
@@ -59,19 +84,71 @@ export default class Create {
     }
   }
 
-  public copyTemplate = async () => {
+  public copyTemplate = async (args: ITemplateArgs) => {
     const { targetDir, templatePath } = this;
-    // console.log(targetDir);
     await fs.emptyDir(targetDir);
     await fs.copy(templatePath, targetDir);
+    await this.getTemplateFiles(args);
+  }
+
+  public getTemplateFiles = async (args: ITemplateArgs) => {
+    const { targetDir, templatePath } = this;
+    const fileList = [
+      '/src/server.ts',
+      // '/src/app/index.tsx',
+    ];
+    await Promise.all(
+      fileList.map(async (src) => {
+        const file = path.join(templatePath, src);
+        const fileContent = await fs.readFile(file, 'utf8');
+        let content;
+        try {
+          const templateFunction = template(fileContent);
+          content = stripWhitespace(
+            templateFunction(Object.assign({}, args))
+          );
+        } catch (err) {
+          throw new Error(`Could not compile template ${file}: ${err.message}`);
+        }
+        await fs.outputFile(path.join(targetDir, src), content, {
+          encoding: 'utf8'
+        });
+      })
+    );
   }
 
   public create = async () => {
+    const { value: lan } = await inquirer.prompt<{ value: Language }>({
+      type: 'list',
+      name: 'value',
+      message: 'Select language.',
+      choices: [
+        {
+          name: '中文',
+          value: 'zhCn'
+        },
+        {
+          name: 'English',
+          value: 'en'
+        },
+      ],
+      default: 'koa'
+    });
+    const { value: framework } = await inquirer.prompt<{ value: Framework }>({
+      type: 'list',
+      name: 'value',
+      message: i18n[lan].selectFramework,
+      choices: [
+        'koa',
+        'express',
+      ],
+      default: 'koa'
+    });
     const { targetDir } = this;
     console.log(`\n Creating a new React app in ${chalk.green(targetDir)}. \n`);
     await promiseLogger(await this.ensureDir(), 'Check the create folder.');
-    await promiseLogger(this.copyTemplate(), 'Copy template folder.');
-    this.installModules();
+    await promiseLogger(this.copyTemplate({ framework }), 'Copy template folder.');
+    // this.installModules();
   }
 
   public ensureDir = async () => {

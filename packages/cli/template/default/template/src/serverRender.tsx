@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
-
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
+
 import App from './app/App';
 
-export default async (req: any) => {
+export default async () => {
   const markup = renderToString(<App />);
   const assets = JSON.parse(
     fs.readFileSync(path.join(process.env.APP_PUBLIC_DIR as any, 'asset-manifest.json')).toString()
