@@ -1,0 +1,45 @@
+{
+  "name": "reslow-with-loadable-components",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "reslow start",
+    "build": "reslow build",
+    "start:prod": "node .reslow/server.js",
+    "now-start": "yarn start:prod",
+    "now-build": "yarn build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@loadable/component": "^5.5.0",
+    "@loadable/server": "^5.5.0",
+    "@reach/router": "^1.2.1",
+    "koa": "^2.6.2",
+    "koa-helmet": "^4.0.0",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hot-loader": "latest"
+  },
+  "devDependencies": {
+    "@reslow/cli": "latest",
+    "@reslow/template": "^0.0.4",
+    "@loadable/babel-plugin": "^5.5.0",
+    "@types/koa": "^2.0.48",
+    "@types/koa-helmet": "^3.1.2",
+    "@types/koa-mount": "^3.0.1",
+    "@types/koa-router": "^7.0.37",
+    "@types/koa-static": "^4.0.0",
+    "@types/loadable__component": "^5.2.0",
+    "@types/loadable__server": "^5.2.0",
+    "@types/reach__router": "^1.2.3",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@loadable/webpack-plugin": "^5.5.0"
+  }
+}
