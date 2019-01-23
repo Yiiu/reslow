@@ -1,6 +1,6 @@
 {
   "name": "reslow-with-koa",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reslow/cli": "^0.2.12",
+    "@reslow/cli": "^0.2.13",
     "@types/koa": "^2.0.48",
     "@types/koa-helmet": "^3.1.2",
     "@types/koa-mount": "^3.0.1",
