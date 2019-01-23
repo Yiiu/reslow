@@ -9,6 +9,7 @@
     "start:prod": "node .reslow/server.js",
     "now-start": "yarn start:prod"
   },
+  "private": true,
   "author": "",
   "license": "ISC",
   "dependencies": {
