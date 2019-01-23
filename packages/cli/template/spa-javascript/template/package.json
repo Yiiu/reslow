@@ -1,0 +1,19 @@
+{
+  "name": "<%= projectName %>",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "reslow start",
+    "build": "reslow build",
+    "start:prod": "serve .reslow"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@reslow/cli": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hot-loader": "latest"
+  }
+}

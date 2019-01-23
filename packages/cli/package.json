@@ -5,6 +5,10 @@
   "repository": "git@github.com:yiiu/reslow.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yiiu/reslow/issues"
+  },
+  "homepage": "https://github.com/yiiu/reslow#readme",
   "main": "index.js",
   "bin": {
     "reslow": "./bin/reslow.js"
@@ -34,6 +38,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "^7.2.0",
     "@babel/runtime-corejs2": "^7.2.0",
+    "@reslow/template": "^0.0.2",
     "@types/ejs": "^2.6.1",
     "@types/prompts": "^1.2.0",
     "autodll-webpack-plugin": "^0.4.2",

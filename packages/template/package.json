@@ -1,0 +1,25 @@
+{
+  "name": "@reslow/template",
+  "version": "0.0.2",
+  "description": "reslow template",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yiiu/reslow.git"
+  },
+  "keywords": [
+    "reslow"
+  ],
+  "author": "Yiiu <yu.gintoki@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yiiu/reslow/issues"
+  },
+  "homepage": "https://github.com/yiiu/reslow#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}

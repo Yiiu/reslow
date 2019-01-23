@@ -1,0 +1,19 @@
+{
+  "template": "/template",
+  "files": [
+    "tsconfig.json",
+    "package.json",
+    "config.js",
+    "src/serverRender.jsx",
+    "src/server.js",
+    "src/app/index.jsx",
+    "src/app/index.css",
+    "src/app/App.jsx",
+    "src/app/App.css",
+    "public/index.html"
+  ],
+  "public": [
+    "public/favicon.ico",
+    "src/app/logo.svg"
+  ]
+}

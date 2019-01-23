@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
+import * as ejs from 'ejs';
 import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
 import { template } from 'lodash';
@@ -9,10 +10,13 @@ import { promiseLogger } from '../../utils/promiseLogger';
 
 type Framework = 'koa' | 'express';
 type Type = 'ssr' | 'spa';
+type Script = 'javascript' | 'typescript';
 
 interface ITemplateArgs {
   framework?: Framework;
   type: Type;
+  projectName: string;
+  script: Script;
 }
 
 export interface ICreateOptions {
@@ -22,22 +26,6 @@ export interface ICreateOptions {
 }
 
 const cwd = process.cwd();
-
-const WHITESPACE_REPLACEMENTS = [
-  [/[ \t\f\r]+\n/g, '\n'], // strip empty indents
-  [/{\n{2,}/g, '{\n'], // strip start padding from blocks
-  [/\n{2,}([ \t\f\r]*})/g, '\n$1'], // strip end padding from blocks
-  [/\n{3,}/g, '\n\n'], // strip multiple blank lines (1 allowed)
-  [/\n{2,}$/g, '\n'] // strip blank lines EOF (0 allowed)
-];
-
-function stripWhitespace(string: any) {
-  let newString = string;
-  WHITESPACE_REPLACEMENTS.forEach(([regex, newSubstr]) => {
-    newString = string.replace(regex, newSubstr);
-  });
-  return newString;
-}
 
 export default class Create {
 
@@ -50,6 +38,7 @@ export default class Create {
   public template!: {
     template: string;
     files: string[];
+    public: string[];
   };
   public useYarn: boolean;
 
@@ -68,11 +57,20 @@ export default class Create {
   }
 
   public getTemplatePath = (args: ITemplateArgs) => {
-    const dir = path.join(__dirname, '../../../../');
+    const dir = require('@reslow/template').dir;
+    console.log(dir);
     if (args.type === 'spa') {
-      this.templatePath = path.join(dir, 'template/spa');
+      if (args.script === 'typescript') {
+        this.templatePath = path.join(dir, '/spa');
+      } else {
+        this.templatePath = path.join(dir, '/spa-javascript');
+      }
     } else {
-      this.templatePath = path.join(dir, 'template/default');
+      if (args.script === 'typescript') {
+        this.templatePath = path.join(dir, '/default');
+      } else {
+        this.templatePath = path.join(dir, '/javascript');
+      }
     }
     if (!fs.existsSync(this.templatePath)) {
       this.exit('Failed to get template, template not found');
@@ -88,24 +86,26 @@ export default class Create {
   public getTemplateFiles = async (args: ITemplateArgs) => {
     const { targetDir, templatePath, template: templateConfig } = this;
     await Promise.all(
-      templateConfig.files.map(async (src: string) => {
-        const file = path.join(templatePath, templateConfig.template, src);
-        const fileContent = await fs.readFile(file, 'utf8');
-        let content;
-        try {
-          const templateFunction = template(fileContent, {
-            interpolate: /<%=([\s\S]+?)%>/g
+      [
+        ...templateConfig.files.map(async (src: string) => {
+          const file = path.join(templatePath, templateConfig.template, src);
+          const fileContent = await fs.readFile(file, 'utf8');
+          let finalTemplate;
+          try {
+            const content = ejs.render(fileContent, Object.assign({}, args));
+            finalTemplate = `${content.trim()}\n`;
+          } catch (err) {
+            throw new Error(`Could not compile template ${file}: ${err.message}`);
+          }
+          await fs.outputFile(path.join(targetDir, src), finalTemplate, {
+            encoding: 'utf8'
           });
-          content = stripWhitespace(
-            templateFunction(Object.assign({}, args))
-          );
-        } catch (err) {
-          throw new Error(`Could not compile template ${file}: ${err.message}`);
-        }
-        await fs.outputFile(path.join(targetDir, src), content, {
-          encoding: 'utf8'
-        });
-      })
+        }),
+        ...templateConfig.public.map(async (src: string) => {
+          const file = path.join(templatePath, templateConfig.template, src);
+          await fs.copy(file, path.join(targetDir, src));
+        })
+      ]
     );
   }
 
@@ -131,8 +131,16 @@ export default class Create {
 
   public getPromptArgs = async () => {
     const args: ITemplateArgs = {
-      type: 'ssr'
+      type: 'ssr',
+      projectName: this.projectName,
+      script: 'javascript'
     };
+    args.projectName = await this.prompt<Type>({
+      type: 'input',
+      name: 'value',
+      message: 'Input project name.',
+      default: args.projectName
+    });
     args.type = await this.prompt<Type>({
       type: 'list',
       name: 'value',
@@ -148,6 +156,13 @@ export default class Create {
         }
       ],
       default: 'ssr'
+    });
+    args.script = await this.prompt<Script>({
+      type: 'list',
+      name: 'value',
+      message: 'Select script.',
+      choices: ['typescript', 'javascript'],
+      default: 'typescript'
     });
     if (args.type === 'ssr') {
       args.framework = await this.prompt<Framework>({
@@ -216,15 +231,15 @@ export default class Create {
 
   public installModules = () => {
     const { targetDir, useYarn, name, inCurrent } = this;
-    const dependencies = this.getInstallPackage();
+    // const dependencies = this.getInstallPackage();
     process.chdir(targetDir);
     let command: string;
     let args: string[] = [];
     if (useYarn) {
       command = 'yarnpkg';
-      if (dependencies.length > 0) {
-        args.push('--exact');
-      }
+      // if (dependencies.length > 0) {
+      //   args.push('--exact');
+      // }
       args.push('--cwd');
       args.push(targetDir);
     } else {
