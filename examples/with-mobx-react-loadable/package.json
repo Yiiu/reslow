@@ -1,9 +1,9 @@
 {
   "name": "reslow-with-mobx-react-loadable",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "dependencies": {
-    "@reslow/cli": "^0.2.13",
+    "@reslow/cli": "^0.2.14",
     "@reslow/plugin-tslint": "^0.0.27",
     "axios": "^0.18.0",
     "express": "^5.0.0-alpha.7",
