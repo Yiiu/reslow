@@ -1,0 +1,20 @@
+{
+  "template": "/template",
+  "files": [
+    "tsconfig.json",
+    "package.json",
+    "config.js",
+    "src/typing.d.ts",
+    "src/serverRender.tsx",
+    "src/server.ts",
+    "src/app/index.tsx",
+    "src/app/index.css",
+    "src/app/App.tsx",
+    "src/app/App.css",
+    "public/index.html"
+  ],
+  "public": [
+    "public/favicon.ico",
+    "src/app/logo.svg"
+  ]
+}

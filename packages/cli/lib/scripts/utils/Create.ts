@@ -1,18 +1,31 @@
 import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
+import * as ejs from 'ejs';
 import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
+import { template } from 'lodash';
 import * as path from 'path';
 
 import { promiseLogger } from '../../utils/promiseLogger';
 
-const cwd = process.cwd();
+type Framework = 'koa' | 'express';
+type Type = 'ssr' | 'spa';
+type Script = 'javascript' | 'typescript';
+
+interface ITemplateArgs {
+  framework?: Framework;
+  type: Type;
+  projectName: string;
+  script: Script;
+}
 
 export interface ICreateOptions {
   template?: string;
   spa?: boolean;
   plugin?: boolean;
 }
+
+const cwd = process.cwd();
 
 export default class Create {
 
@@ -22,7 +35,11 @@ export default class Create {
   public targetDir!: string;
   public inCurrent!: boolean;
   public templatePath!: string;
-
+  public template!: {
+    template: string;
+    files: string[];
+    public: string[];
+  };
   public useYarn: boolean;
 
   constructor(projectName: string, options: ICreateOptions = {}) {
@@ -36,41 +53,139 @@ export default class Create {
     this.inCurrent = projectName === '.';
     this.name = this.inCurrent ? path.relative('../', cwd) : projectName;
     this.targetDir = path.resolve(cwd, projectName || '.');
-    this.getTemplatePath();
+    // this.getTemplatePath();
   }
 
-  public getTemplatePath = () => {
-    const dir = path.join(__dirname, '../../../../');
-    if (this.options.template) {
-      this.templatePath = this.options.template;
-    } else {
-      if (this.options.spa) {
-        this.templatePath = path.join(dir, 'template/spa');
+  public getTemplatePath = (args: ITemplateArgs) => {
+    const dir = require('@reslow/template').dir;
+    console.log(dir);
+    if (args.type === 'spa') {
+      if (args.script === 'typescript') {
+        this.templatePath = path.join(dir, '/spa');
       } else {
-        this.templatePath = path.join(dir, 'template/default');
+        this.templatePath = path.join(dir, '/spa-javascript');
       }
-      if (this.options.plugin) {
-        this.templatePath = path.join(dir, 'template/plugin');
+    } else {
+      if (args.script === 'typescript') {
+        this.templatePath = path.join(dir, '/default');
+      } else {
+        this.templatePath = path.join(dir, '/javascript');
       }
     }
     if (!fs.existsSync(this.templatePath)) {
-      console.error(`\n ${chalk.red('no template')} \n`);
-      process.exit(1);
+      this.exit('Failed to get template, template not found');
+    } else {
+      this.template = this.templateConfigAndFile();
     }
   }
 
-  public copyTemplate = async () => {
-    const { targetDir, templatePath } = this;
-    // console.log(targetDir);
-    await fs.emptyDir(targetDir);
-    await fs.copy(templatePath, targetDir);
+  public copyTemplate = async (args: ITemplateArgs) => {
+    await this.getTemplateFiles(args);
+  }
+
+  public getTemplateFiles = async (args: ITemplateArgs) => {
+    const { targetDir, templatePath, template: templateConfig } = this;
+    await Promise.all(
+      [
+        ...templateConfig.files.map(async (src: string) => {
+          const file = path.join(templatePath, templateConfig.template, src);
+          const fileContent = await fs.readFile(file, 'utf8');
+          let finalTemplate;
+          try {
+            const content = ejs.render(fileContent, Object.assign({}, args));
+            finalTemplate = `${content.trim()}\n`;
+          } catch (err) {
+            throw new Error(`Could not compile template ${file}: ${err.message}`);
+          }
+          await fs.outputFile(path.join(targetDir, src), finalTemplate, {
+            encoding: 'utf8'
+          });
+        }),
+        ...templateConfig.public.map(async (src: string) => {
+          const file = path.join(templatePath, templateConfig.template, src);
+          await fs.copy(file, path.join(targetDir, src));
+        })
+      ]
+    );
+  }
+
+  public templateConfigAndFile = () => {
+    const { templatePath } = this;
+    const configFile = path.join(templatePath, 'config.json');
+    if (!fs.existsSync(configFile)) {
+      this.exit('template config error');
+    }
+    const config = require(configFile);
+    return config;
+  }
+
+  public prompt = async <T>(questions: inquirer.Questions<any>): Promise<T> => {
+    const { value } = await inquirer.prompt<{ value: T }>(questions);
+    return value;
+  }
+
+  public exit = (message: string) => {
+    console.error(`\n ${chalk.red(message)} \n`);
+    process.exit(1);
+  }
+
+  public getPromptArgs = async () => {
+    const args: ITemplateArgs = {
+      type: 'ssr',
+      projectName: this.projectName,
+      script: 'javascript'
+    };
+    args.projectName = await this.prompt<Type>({
+      type: 'input',
+      name: 'value',
+      message: 'Input project name.',
+      default: args.projectName
+    });
+    args.type = await this.prompt<Type>({
+      type: 'list',
+      name: 'value',
+      message: 'Select template type.',
+      choices: [
+        {
+          name: 'server side render',
+          value: 'ssr'
+        },
+        {
+          name: 'spa',
+          value: 'spa'
+        }
+      ],
+      default: 'ssr'
+    });
+    args.script = await this.prompt<Script>({
+      type: 'list',
+      name: 'value',
+      message: 'Select script.',
+      choices: ['typescript', 'javascript'],
+      default: 'typescript'
+    });
+    if (args.type === 'ssr') {
+      args.framework = await this.prompt<Framework>({
+        type: 'list',
+        name: 'value',
+        message: 'Select server web framework.',
+        choices: [
+          'koa',
+          'express',
+        ],
+        default: 'koa'
+      });
+    }
+    return args;
   }
 
   public create = async () => {
     const { targetDir } = this;
     console.log(`\n Creating a new React app in ${chalk.green(targetDir)}. \n`);
     await promiseLogger(await this.ensureDir(), 'Check the create folder.');
-    await promiseLogger(this.copyTemplate(), 'Copy template folder.');
+    const args = await this.getPromptArgs();
+    await promiseLogger(this.getTemplatePath(args), 'Get template folder.');
+    await promiseLogger(this.copyTemplate(args), 'Copy template folder.');
     this.installModules();
   }
 
@@ -89,7 +204,7 @@ export default class Create {
           message: 'Generate project in current directory?',
         });
         if (!ok) {
-          return false;
+          this.exit('');
         }
       } else {
         const { ok } = await inquirer.prompt<{ok: boolean}>({
@@ -98,10 +213,11 @@ export default class Create {
           message: 'The folder already exists, is it deleted?',
         });
         if (!ok) {
-          return false;
+          this.exit('');
         }
       }
     }
+    fs.emptyDirSync(targetDir);
   }
 
   public shouldUseYarn = () => {
@@ -115,28 +231,24 @@ export default class Create {
 
   public installModules = () => {
     const { targetDir, useYarn, name, inCurrent } = this;
-    const dependencies = this.getInstallPackage();
+    // const dependencies = this.getInstallPackage();
     process.chdir(targetDir);
     let command: string;
-    let args: string[];
+    let args: string[] = [];
     if (useYarn) {
       command = 'yarnpkg';
-      args = ['add'];
-      if (dependencies.length > 0) {
-        args.push('--exact');
-      }
-      args = [...args, ...dependencies];
+      // if (dependencies.length > 0) {
+      //   args.push('--exact');
+      // }
       args.push('--cwd');
       args.push(targetDir);
     } else {
       command = 'npm';
       args = [
         'install',
-        '--save',
-        '--save-exact',
         '--loglevel',
         'error',
-      ].concat(dependencies);
+      ];
     }
     const child = spawn(command, args, { stdio: 'inherit' });
     console.log(`\n ${chalk.green('Installing packages.')} This might take a couple of minutes.\n`);
