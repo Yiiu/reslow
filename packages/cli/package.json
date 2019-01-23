@@ -1,6 +1,6 @@
 {
   "name": "@reslow/cli",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/reslow.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
@@ -38,7 +38,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "^7.2.0",
     "@babel/runtime-corejs2": "^7.2.0",
-    "@reslow/template": "^0.0.2",
+    "@reslow/template": "^0.0.3",
     "@types/ejs": "^2.6.1",
     "@types/prompts": "^1.2.0",
     "autodll-webpack-plugin": "^0.4.2",

@@ -1,6 +1,6 @@
 {
   "name": "reslow-with-tslint",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "private": true,
@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reslow/cli": "^0.2.11",
+    "@reslow/cli": "^0.2.12",
     "@types/react": "^16.4.18",
     "@types/react-dom": "16.0.9",
     "express": "4.16.4",
