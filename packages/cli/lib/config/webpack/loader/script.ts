@@ -20,7 +20,7 @@ export default (_: IScriptLoaderConfig) => {
       {
         loader: require.resolve('babel-loader'),
         options: {
-          babelrc: false,
+          babelrc: true,
           configFile: false,
           cacheDirectory: true,
           presets: [

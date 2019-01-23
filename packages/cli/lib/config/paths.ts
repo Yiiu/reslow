@@ -20,6 +20,7 @@ export default {
   appBuild: config.build,
   appBuildPublic: resolveApp(`${config.build}`),
   appBuildSrc: resolveApp(config.build),
+  appBabelRc: resolveApp('.babelrc'),
   appTsConfig: resolveApp('tsconfig.json'),
   assetManifest: resolveApp(`${config.build}/asset-manifest.json`),
   assetLoadable: resolveApp(`${config.build}/react-loadable.json`),
