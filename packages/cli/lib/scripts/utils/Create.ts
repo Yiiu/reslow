@@ -3,7 +3,6 @@ import * as spawn from 'cross-spawn';
 import * as ejs from 'ejs';
 import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
-import { template } from 'lodash';
 import * as path from 'path';
 
 import { promiseLogger } from '../../utils/promiseLogger';

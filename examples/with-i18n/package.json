@@ -27,5 +27,6 @@
     "react-dom": "16.7.0",
     "react-hot-loader": "4.6.3",
     "react-i18next": "^9.0.2"
-  }
+  },
+  "gitHead": "96cf1c4665c16f92001c265292a03e257b72cca5"
 }

@@ -21,5 +21,6 @@
   "homepage": "https://github.com/yiiu/reslow#readme",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "96cf1c4665c16f92001c265292a03e257b72cca5"
 }
