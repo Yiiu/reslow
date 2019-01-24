@@ -1,6 +1,6 @@
 {
   "name": "reslow-with-loadable-components",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "private": true,
@@ -30,7 +30,7 @@
     "@loadable/babel-plugin": "^5.5.0",
     "@loadable/webpack-plugin": "^5.5.0",
     "@reslow/cli": "latest",
-    "@reslow/template": "^0.0.4",
+    "@reslow/template": "^0.0.5",
     "@types/koa": "^2.0.48",
     "@types/koa-helmet": "^3.1.2",
     "@types/koa-mount": "^3.0.1",
