@@ -3,8 +3,6 @@
 'use strict';
 const program = require('commander');
 
-process.env.DEV = 'development';
-
 program
   .version(require('../package.json').version)
 
