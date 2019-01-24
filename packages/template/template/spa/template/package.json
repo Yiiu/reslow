@@ -12,9 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "@reslow/cli": "latest",
+    <%_ if (isTypescript) { _%>
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/node": "latest",
+    <%_ } _%>
     "react": "latest",
     "react-dom": "latest",
     "react-hot-loader": "latest"

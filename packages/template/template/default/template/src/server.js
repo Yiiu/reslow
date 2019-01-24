@@ -8,7 +8,7 @@ import Router from 'koa-router';
 import * as express from 'express';
 <%_ } _%>
 
-let serverRender = require('./serverRender.tsx').default;
+let serverRender = require('./serverRender.jsx').default;
 
 <%_ if (framework === 'koa') { _%>
 const router = new Router();
@@ -23,7 +23,7 @@ if (module.hot) {
   module.hot.accept('./serverRender', () => {
     console.log('🔁  HMR Reloading `./serverRender`...');
     try {
-      serverRender = require('./serverRender.tsx').default;
+      serverRender = require('./serverRender').default;
     } catch (error) {
       console.error(error);
     }
@@ -45,14 +45,14 @@ app
   .use(router.allowedMethods())
   .listen(process.env.PORT);
 <%_ } else if (framework === 'express') { _%>
-app.listen(Number(process.env.PORT), (err: any) => {
+app.listen(process.env.PORT, process.env.HOST, (err) => {
   if (err) {
     console.error(err);
   } else {
     console.info(`\n\n 💂  Listening at http://${process.env.HOST}:${process.env.PORT}\n`);
   }
 });
-app.use('/public', express.static(process.env.APP_PUBLIC_DIR!));
+app.use('/public', express.static(process.env.APP_PUBLIC_DIR));
 app.get('*', async (req: express.Request, res: express.Response) => {
   res.send(await serverRender(req));
 });

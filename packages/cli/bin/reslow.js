@@ -3,13 +3,16 @@
 'use strict';
 const program = require('commander');
 
+process.env.DEV = 'development';
+
 program
   .version(require('../package.json').version)
 
 program
   .command('create <project-name>')
-  .option("-s, --spa", "SPA mode and disables server side rendering")
-  .option("-p, --plugin", "plugin template")
+  // .option("-s, --spa", "SPA mode and disables server side rendering")
+  // .option("-p, --plugin", "plugin template")
+  .option("-n, --npm", "npm")
   .description('run dev create')
   .action((name, args) => {
     process.env.NODE_ENV = 'production';

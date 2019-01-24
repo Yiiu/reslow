@@ -1,5 +1,5 @@
 {
-  "name": "<%= projectName %>",
+  "name": "aaa",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -12,29 +12,19 @@
   "license": "ISC",
   "dependencies": {
     "@reslow/cli": "latest",
-    <%_ if (framework === 'koa' && isTypescript) { _%>
     "@types/koa": "^2.0.48",
     "@types/koa-helmet": "^3.1.2",
     "@types/koa-mount": "^3.0.1",
     "@types/koa-router": "^7.0.37",
     "@types/koa-static": "^4.0.0",
-    <%_ } else if (framework === 'express' && isTypescript) { _%>
-    "@types/express": "^4.16.0",
-    <%_ } _%>
-    <%_ if (isTypescript) { _%>
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    <%_ } _%>
-    <%_ if (framework === 'koa') { _%>
     "koa": "^2.6.2",
     "koa-helmet": "^4.0.0",
     "koa-mount": "^4.0.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    <%_ } else if (framework === 'express') { _%>
-    "express": "^4.16.4",
-    <%_ } _%>
     "react": "latest",
     "react-dom": "latest",
     "react-hot-loader": "latest"

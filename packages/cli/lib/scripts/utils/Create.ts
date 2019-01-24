@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
 import * as ejs from 'ejs';
 import * as fs from 'fs-extra';
+import * as glob from 'glob';
 import * as inquirer from 'inquirer';
 import * as path from 'path';
 
@@ -9,23 +10,31 @@ import { promiseLogger } from '../../utils/promiseLogger';
 
 type Framework = 'koa' | 'express';
 type Type = 'ssr' | 'spa';
-type Script = 'javascript' | 'typescript';
 
 interface ITemplateArgs {
   framework?: Framework;
   type: Type;
   projectName: string;
-  script: Script;
+  isTypescript: boolean;
 }
 
 export interface ICreateOptions {
   template?: string;
   spa?: boolean;
   plugin?: boolean;
+  npm?: boolean;
 }
 
 const cwd = process.cwd();
 
+function isTsFile(file: string) {
+  return file.endsWith('.ts')
+    || file.endsWith('.tsx')
+    || [
+      'tsconfig.json',
+      'typings.d.ts',
+    ].includes(file);
+}
 export default class Create {
 
   public projectName: string;
@@ -44,7 +53,7 @@ export default class Create {
   constructor(projectName: string, options: ICreateOptions = {}) {
     this.projectName = projectName;
     this.options = options;
-    this.useYarn = this.shouldUseYarn();
+    this.useYarn = options.npm ? false : this.shouldUseYarn();
     this.getInfo(this.projectName);
   }
 
@@ -56,16 +65,20 @@ export default class Create {
   }
 
   public getTemplatePath = (args: ITemplateArgs) => {
-    const dir = require('@reslow/template').dir;
-    console.log(dir);
+    let dir;
+    if (process.env.DEV === 'development') {
+      dir = require('../../../../../template').dir;
+    } else {
+      dir = require('@reslow/template').dir;
+    }
     if (args.type === 'spa') {
-      if (args.script === 'typescript') {
+      if (args.isTypescript) {
         this.templatePath = path.join(dir, '/spa');
       } else {
         this.templatePath = path.join(dir, '/spa-javascript');
       }
     } else {
-      if (args.script === 'typescript') {
+      if (args.isTypescript) {
         this.templatePath = path.join(dir, '/default');
       } else {
         this.templatePath = path.join(dir, '/javascript');
@@ -84,10 +97,33 @@ export default class Create {
 
   public getTemplateFiles = async (args: ITemplateArgs) => {
     const { targetDir, templatePath, template: templateConfig } = this;
+    const data = glob.sync('**/*', {
+      cwd: path.join(templatePath, templateConfig.template),
+      dot: true,
+    });
+    const fileList = data.filter((file) => {
+      if (args.isTypescript) {
+        if ((file.endsWith('.js') || file.endsWith('.jsx')) && file !== 'config.js') {
+          return false;
+        }
+      } else {
+        if (file === 'tsconfig.json') {
+          return false;
+        }
+        return !isTsFile(file);
+      }
+      if (!templateConfig.public.every(v => v !== file)) {
+        return false;
+      }
+      return true;
+    });
     await Promise.all(
       [
-        ...templateConfig.files.map(async (src: string) => {
+        ...fileList.map(async (src: string) => {
           const file = path.join(templatePath, templateConfig.template, src);
+          if (!fs.statSync(file).isFile()) {
+            return;
+          }
           const fileContent = await fs.readFile(file, 'utf8');
           let finalTemplate;
           try {
@@ -132,7 +168,7 @@ export default class Create {
     const args: ITemplateArgs = {
       type: 'ssr',
       projectName: this.projectName,
-      script: 'javascript'
+      isTypescript: true
     };
     args.projectName = await this.prompt<Type>({
       type: 'input',
@@ -156,12 +192,11 @@ export default class Create {
       ],
       default: 'ssr'
     });
-    args.script = await this.prompt<Script>({
-      type: 'list',
+    args.isTypescript = await this.prompt<boolean>({
+      type: 'confirm',
       name: 'value',
-      message: 'Select script.',
-      choices: ['typescript', 'javascript'],
-      default: 'typescript'
+      message: 'Do you want to use typescript?',
+      default: true
     });
     if (args.type === 'ssr') {
       args.framework = await this.prompt<Framework>({

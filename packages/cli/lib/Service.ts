@@ -12,6 +12,7 @@ import Scripts from './scripts';
 export type Command = 'start' | 'build';
 
 export interface IArgs {
+  npm?: boolean;
   spa?: boolean;
   mode?: string;
   open?: boolean;

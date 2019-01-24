@@ -12,6 +12,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "strict": true,
+    "lib": ["es2016"],
     "composite": true,
     "alwaysStrict": true
     // "esModuleInterop": true
