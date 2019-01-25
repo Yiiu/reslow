@@ -24,6 +24,9 @@ if (module.hot) {
 }
 
 router
+  .get('/service-worker.js', async (ctx) => {
+    ctx.body = await serverRender(ctx);
+  })
   .get('/*', async (ctx) => {
     ctx.body = await serverRender(ctx);
   })
@@ -34,4 +37,6 @@ app
   .use(mount('/public', serve(process.env.APP_PUBLIC_DIR!)))
   .use(router.routes())
   .use(router.allowedMethods())
-  .listen(process.env.PORT);
+  .listen(process.env.PORT || 3000, () => {
+    console.log(`ok! ${process.env.PORT || 3000}`)
+  });

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import loadable from '@loadable/component'
 import { Router, Link, RouteComponentProps } from '@reach/router'
 
-const Home = loadable(() => import('./Home'))
-const Info = loadable(() => import('./Info'))
+const Home = loadable(() => import(/* webpackChunkName: "Home" */'./Home'))
+const Info = loadable(() => import(/* webpackChunkName: "Info" */'./Info'))
 
 const No: React.SFC<RouteComponentProps> = () => (
   <h1>404</h1>

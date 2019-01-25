@@ -9,14 +9,17 @@
     "build": "reslow build",
     "start:prod": "node .reslow/server.js",
     "now-start": "yarn start:prod",
+    "postinstall": "yarn build",
     "now-build": "yarn build"
   },
-  "author": "",
+  "author": "Yiiu",
   "license": "ISC",
   "dependencies": {
     "@loadable/component": "^5.5.0",
     "@loadable/server": "^5.5.0",
     "@reach/router": "^1.2.1",
+    "@reslow/cli": "^0.2.16",
+    "@reslow/template": "^0.0.5",
     "koa": "^2.6.2",
     "koa-helmet": "^4.0.0",
     "koa-mount": "^4.0.0",
@@ -29,8 +32,6 @@
   "devDependencies": {
     "@loadable/babel-plugin": "^5.5.0",
     "@loadable/webpack-plugin": "^5.5.0",
-    "@reslow/cli": "latest",
-    "@reslow/template": "^0.0.5",
     "@types/koa": "^2.0.48",
     "@types/koa-helmet": "^3.1.2",
     "@types/koa-mount": "^3.0.1",
@@ -41,5 +42,9 @@
     "@types/reach__router": "^1.2.3",
     "@types/react": "latest",
     "@types/react-dom": "latest"
+  },
+  "engines": {
+    "yarn": "1.x",
+    "node": "11.3.0"
   }
 }
