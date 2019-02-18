@@ -1,0 +1,29 @@
+{
+  "name": "with-todo-list",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "reslow start",
+    "build": "reslow build",
+    "start:prod": "serve .reslow"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@reslow/cli": "latest",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "classnames": "^2.2.6",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hot-loader": "latest",
+    "todomvc-app-css": "^2.1.2",
+    "todomvc-common": "^1.0.5"
+  }
+}
