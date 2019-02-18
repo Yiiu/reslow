@@ -3,10 +3,14 @@ import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 export interface IStyleLoaderConfig {
   isServer: boolean;
+  css: {
+    cssModules: boolean
+  }
 }
 
 export default ({
   isServer = false,
+  css
 }: IStyleLoaderConfig) => {
   return {
     test: /\.css|less$/,
@@ -21,7 +25,7 @@ export default ({
         loader: require.resolve(`css-loader${isServer ? '/locals' : ''}`),
         options: {
           importLoaders: 1,
-          modules: true,
+          modules: css.cssModules,
           localIdentName: '[local]_[hash:base64:8]',
         },
       },

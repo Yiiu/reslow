@@ -31,7 +31,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (isServer: boolean, service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { hardSource, ssr, noTs, host, port } = projectOptions;
+  const { hardSource, ssr, noTs, host, port, css } = projectOptions;
   const dotenv = getEnv(isServer, projectOptions, '');
 
   const webpackMode = process.env.NODE_ENV;
@@ -85,7 +85,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       rules: [
         {
           oneOf: [
-            styleLoader({ isServer }),
+            styleLoader({ isServer, css }),
             scriptLoader({ isServer }),
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
