@@ -23,6 +23,7 @@ export default class Options {
   public port = '3000';
   public devPort = '3001';
   public noTs = false;
+  public electron = false;
   public quiet = true;
   public css = {
     cssModules: true

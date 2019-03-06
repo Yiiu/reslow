@@ -11,9 +11,11 @@ export default async (ctx: any) => {
   const manifest = JSON.parse(
     fs.readFileSync(path.join(process.env.APP_PUBLIC_DIR as any, 'asset-manifest.json')).toString()
   );
-  const statsFile = path.join(process.env.APP_PUBLIC_DIR!, 'loadable-stats.json')
+  const stats = JSON.parse(
+    fs.readFileSync(path.join(process.env.APP_PUBLIC_DIR as any, 'loadable-stats.json')).toString()
+  );
   const extractor = new ChunkExtractor({
-    statsFile
+    stats
   })
   const markup = renderToString(
     <ChunkExtractorManager extractor={extractor}>

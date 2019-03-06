@@ -31,18 +31,27 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (isServer: boolean, service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { hardSource, ssr, noTs, host, port, css } = projectOptions;
+  const { hardSource, ssr, noTs, host, port, css, electron } = projectOptions;
   const dotenv = getEnv(isServer, projectOptions, '');
 
   const webpackMode = process.env.NODE_ENV;
-
+  let publicPath = '';
+  if (ssr) {
+    publicPath = '/public/';
+  } else {
+    if (electron) {
+      publicPath = '';
+    } else {
+      publicPath = '/';
+    }
+  }
   let webpackConfig = {
     mode: webpackMode as any,
     devtool: 'source-map',
     context: process.cwd(),
     cache: true,
     output: {
-      publicPath: ssr ? '/public/' : '/',
+      publicPath,
       hotUpdateChunkFilename: 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: 'static/webpack/[hash].hot-update.json',
     },

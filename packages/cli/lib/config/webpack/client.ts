@@ -26,7 +26,7 @@ const dev = process.env.NODE_ENV === 'development';
 
 export default (service: Service, args: IArgs) => {
   const { projectOptions } = service;
-  const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr, quiet } = projectOptions;
+  const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr, quiet, electron } = projectOptions;
   const clientConfig = {
     entry: [
       dev && `webpack-dev-server/client?http://${host}:${devPort}`,
@@ -119,5 +119,8 @@ export default (service: Service, args: IArgs) => {
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
     ].filter(Boolean)
   };
+  if (electron) {
+    (clientConfig as any).target = 'electron-renderer';
+  }
   return merge(baseConfig(false, service, args) as any, clientConfig as any);
 };
