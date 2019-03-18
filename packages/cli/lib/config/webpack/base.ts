@@ -106,13 +106,22 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
               },
             },
             {
+              test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+              loader: require.resolve('file-loader'),
+              options: {
+                limit: 10000,
+                name: 'static/fonts/[name].[hash:7].[ext]',
+                publicPath: process.env.NODE_ENV === 'production' ? '../../' : '/'
+              }
+            },
+            {
               exclude: [/\.(js|jsx|mjs|tsx?)$/, /\.html$/, /\.json$/],
               loader: require.resolve('file-loader'),
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-          ]
+          ].filter(Boolean)
         }
       ],
     },
