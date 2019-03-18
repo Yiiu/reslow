@@ -1,6 +1,6 @@
 {
   "name": "@reslow/cli",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "description": "Create server-rendered react applications",
   "repository": "git@github.com:yiiu/reslow.git",
   "author": "Yiiu <yu.gintoki@gmail.com>",
