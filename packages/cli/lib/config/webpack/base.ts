@@ -95,6 +95,7 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         {
           oneOf: [
             styleLoader({ isServer, css }),
+            css.cssModules && styleLoader({ isServer, css }, true),
             scriptLoader({ isServer }),
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],

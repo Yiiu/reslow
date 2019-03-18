@@ -5,14 +5,26 @@ export interface IStyleLoaderConfig {
   isServer: boolean;
   css: {
     cssModules: boolean
-  }
+  };
 }
 
-export default ({
-  isServer = false,
-  css
-}: IStyleLoaderConfig) => {
+export default (
+  {
+    isServer = false,
+    css
+  }: IStyleLoaderConfig,
+  isModules = false
+) => {
+  let exclude;
+  let include;
+  if (isModules) {
+    include = /node_modules/;
+  } else {
+    exclude = /node_modules/;
+  }
   return {
+    exclude,
+    include,
     test: /\.css|less$/,
     use: [
       !isServer && {
@@ -25,7 +37,7 @@ export default ({
         loader: require.resolve(`css-loader${isServer ? '/locals' : ''}`),
         options: {
           importLoaders: 1,
-          modules: css.cssModules,
+          modules: isModules ? false : css.cssModules,
           localIdentName: '[local]_[hash:base64:8]',
         },
       },
