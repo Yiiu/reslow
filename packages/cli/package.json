@@ -51,6 +51,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "ejs": "^2.6.1",
+    "error-overlay-webpack-plugin": "^0.2.0",
     "extracted-loader": "^1.0.7",
     "file-loader": "^2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "^0.4.14",

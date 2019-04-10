@@ -21,6 +21,7 @@
     "express": "4.16.4",
     "react": "next",
     "react-dom": "next",
+    "react-error-overlay": "^5.1.4",
     "react-hot-loader": "4.6.3",
     "serve": "^10.1.1"
   }
