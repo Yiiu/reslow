@@ -21,6 +21,7 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -114,6 +115,7 @@ export default (service: Service, args: IArgs) => {
         defaultSizes: 'gzip',
         generateStatsFile: true,
       }),
+      // new ErrorOverlayPlugin(),
       new ModuleNotFoundPlugin(paths.appPath),
       new CaseSensitivePathsPlugin(),
       new WatchMissingNodeModulesPlugin(paths.appNodeModules),
