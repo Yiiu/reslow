@@ -17,9 +17,15 @@ export default (
 ) => {
   let exclude;
   let include;
+  let modules;
   if (isModules) {
     include = /node_modules/;
   } else {
+    if (css.cssModules) {
+      modules = {
+        localIdentName: '[local]_[hash:base64:8]',
+      };
+    }
     exclude = /node_modules/;
   }
   return {
@@ -34,11 +40,11 @@ export default (
         loader: MiniCssExtractPlugin.loader,
       },
       {
-        loader: require.resolve(`css-loader${isServer ? '/locals' : ''}`),
+        loader: require.resolve('css-loader'),
         options: {
+          modules,
           importLoaders: 1,
-          modules: isModules ? false : css.cssModules,
-          localIdentName: '[local]_[hash:base64:8]',
+          onlyLocals: isServer,
         },
       },
       {
@@ -50,14 +56,14 @@ export default (
           plugins: () => [
             require('postcss-flexbugs-fixes'),
             autoprefixer({
-              browsers: [
+              overrideBrowserslist: [
                 '>1%',
                 'last 4 versions',
                 'Firefox ESR',
                 'not ie < 9', // React doesn't support IE8 anyway
               ],
               flexbox: 'no-2009',
-            }),
+            } as any),
           ],
         },
       },
