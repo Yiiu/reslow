@@ -21,7 +21,7 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -30,8 +30,9 @@ export default (service: Service, args: IArgs) => {
   const { host, clientIndexJs, autoDll, devPort, proxy, analyze, ssr, quiet, electron } = projectOptions;
   const clientConfig = {
     entry: [
-      dev && `webpack-dev-server/client?http://${host}:${devPort}`,
-      dev && 'webpack/hot/only-dev-server',
+      // dev && `webpack-dev-server/client?http://${host}:${devPort}`,
+      // dev && 'webpack/hot/only-dev-server',
+      // dev && 'react-dev-utils/webpackHotDevClient',
       dev && 'react-hot-loader/patch',
       clientIndexJs
     ].filter(Boolean),
@@ -44,9 +45,11 @@ export default (service: Service, args: IArgs) => {
     devServer: {
       proxy,
       host,
+      quiet,
+      overlay: true,
       port: devPort,
       compress: true,
-      quiet: !!quiet,
+      clientLogLevel: 'none',
       disableHostCheck: true,
       historyApiFallback: {
         disableDotRule: true
@@ -54,16 +57,14 @@ export default (service: Service, args: IArgs) => {
       watchOptions: {
         ignored: /node_modules/,
       },
-      inline: true,
       hot: true,
-      overlay: false,
-      clientLogLevel: 'none',
+      noInfo: true,
       contentBase: paths.appBuildSrc,
       publicPath: ssr ? '/.reslow' : '/',
       before(app: any, server: any) {
-        app.use(evalSourceMapMiddleware(server));
-        app.use(errorOverlayMiddleware());
-        app.use(noopServiceWorkerMiddleware());
+        // app.use(evalSourceMapMiddleware(server));
+        // app.use(errorOverlayMiddleware());
+        // app.use(noopServiceWorkerMiddleware());
       },
     },
     plugins: [
@@ -83,7 +84,7 @@ export default (service: Service, args: IArgs) => {
         PUBLIC_URL: ''
       }),
       dev && ssr && new AutoDllPlugin({
-        debug: true,
+        debug: false,
         inject: true,
         filename: '[name].js',
         entry: {
@@ -91,9 +92,9 @@ export default (service: Service, args: IArgs) => {
           polyfills: autoDll.polyfills || [],
         }
       }),
-      ssr && new ReactLoadablePlugin({
-        filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
-      }),
+      // ssr && new ReactLoadablePlugin({
+      //   filename: path.join(paths.appBuildSrc, 'react-loadable.json'),
+      // }),
       ssr && new ManifestPlugin({
         fileName: 'asset-manifest.json',
         writeToFileEmit: true
@@ -105,21 +106,22 @@ export default (service: Service, args: IArgs) => {
       new CopyWebpackPlugin([{
         from: paths.appPublic,
       }]),
-      new SWPrecacheWebpackPlugin({
-        cacheId: 'client',
-        dontCacheBustUrlsMatching: false,
-        filename: 'service-worker.js',
-        minify: true,
-      } as any),
+      // new SWPrecacheWebpackPlugin({
+      //   cacheId: 'client',
+      //   dontCacheBustUrlsMatching: false,
+      //   filename: 'service-worker.js',
+      //   minify: true,
+      // } as any),
       analyze && new BundleAnalyzerPlugin({
         defaultSizes: 'gzip',
         generateStatsFile: true,
       }),
-      // new ErrorOverlayPlugin(),
+      new ErrorOverlayPlugin(),
       new ModuleNotFoundPlugin(paths.appPath),
-      new CaseSensitivePathsPlugin(),
-      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    ].filter(Boolean)
+      dev && new CaseSensitivePathsPlugin(),
+      dev && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+    ].filter(Boolean),
+    performance: false,
   };
   if (electron) {
     (clientConfig as any).target = 'electron-renderer';

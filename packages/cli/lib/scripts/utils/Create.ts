@@ -154,7 +154,7 @@ export default class Create {
     return config;
   }
 
-  public prompt = async <T>(questions: inquirer.Questions<any>): Promise<T> => {
+  public prompt = async <T>(questions: inquirer.QuestionCollection<any>): Promise<T> => {
     const { value } = await inquirer.prompt<{ value: T }>(questions);
     return value;
   }

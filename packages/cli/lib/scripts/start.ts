@@ -11,11 +11,11 @@ const DevServer = require('webpack-dev-server');
 export default async (service: Service, args: IArgs) => {
   const { projectOptions } = service;
   const clientConfig = clientWebpackConfig(service, args);
-  const serverConfig = serverWebpackConfig(service, args);
   const clientCompiler = webpack(clientConfig as any);
-  const serverCompiler = webpack(serverConfig as any);
 
   if (projectOptions.ssr) {
+    const serverConfig = serverWebpackConfig(service, args);
+    const serverCompiler = webpack(serverConfig as any);
     serverCompiler.watch({}, () => {});
   }
 

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { hot } from 'react-hot-loader/root';
+
 import logo from './logo.svg';
 import style from './App.css';
 
@@ -9,7 +11,7 @@ class App extends Component {
         <header className={style['App-header']}>
           <img src={logo} className={style['App-logo']} alt="logo" />
           <p>
-            Edit <code>src/App.tsx</code> and save to reload.
+            Editss <code>src/App.tsx</code> and save to reload.
           </p>
           <a
             className={style['App-link']}
@@ -25,4 +27,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default hot(App);

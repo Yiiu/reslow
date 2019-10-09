@@ -74,9 +74,10 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
-      // alias: {
-      //   'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client'),
-      // },
+      alias: !isServer ? {
+        'react-dom': '@hot-loader/react-dom',
+        // 'webpack-hot-middleware/client': require.resolve('webpack-hot-middleware/client'),
+      } : {},
       modules: [
         path.resolve(__dirname, '../../../../node_modules'),
         paths.appNodeModules,
@@ -131,7 +132,6 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
       }),
       new webpack.DefinePlugin(dotenv.stringified),
       new webpack.NamedModulesPlugin(),
-      new ModuleNotFoundPlugin(paths.appPath),
       dev && hardSource && new HardSourceWebpackPlugin(),
       dev && new webpack.HotModuleReplacementPlugin(),
       dev && new CaseSensitivePathPlugin(),
@@ -141,21 +141,19 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
         // required not to cache removed files
         useHashIndex: false,
       }),
-      new WebpackBar({
-        minimal: false,
-        compiledIn: false,
-        // profile: true,
-        name: isServer ? 'server' : 'client',
-      }),
+      // dev && new WebpackBar({
+      //   name: isServer ? 'server' : 'client',
+      // }),
       dev && new FriendlyErrorsWebpackPlugin({
         compilationSuccessInfo: {
           messages: [`Your application is running at at http://${host}:${port}`],
           notes: []
         },
-        clearConsole: false,
+        clearConsole: true,
       }),
-      !noTs && new ForkTsCheckerWebpackPlugin({
+      !noTs && !isServer && new ForkTsCheckerWebpackPlugin({
         // silent: true,
+        async: dev,
         reportFiles: [
           '**',
           '!**/*.json',
@@ -164,9 +162,14 @@ export default (isServer: boolean, service: Service, args: IArgs) => {
           '!**/src/setupProxy.*',
           '!**/src/setupTests.*',
         ],
+        logger: {
+          error: console.error,
+          warn: console.warn,
+          info: () => {},
+        },
         watch: paths.appSrc,
         checkSyntacticErrors: true,
-        formatter: typescriptFormatter,
+        formatter: dev ? typescriptFormatter : undefined,
         tsconfig: paths.appTsConfig,
       }),
     ].filter(Boolean)
