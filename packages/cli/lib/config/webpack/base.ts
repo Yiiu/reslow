@@ -6,11 +6,9 @@ import * as HardSourceWebpackPlugin from 'hard-source-webpack-plugin';
 import * as path from 'path';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import * as webpack from 'webpack';
-import * as WebpackBar from 'webpackbar';
 
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 import paths from '../paths';

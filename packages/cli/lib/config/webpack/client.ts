@@ -3,8 +3,6 @@ import * as HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as OptimizeCssAssetsWebpackPlugin from 'optimize-css-assets-webpack-plugin';
 import * as path from 'path';
-import { ReactLoadablePlugin } from 'react-loadable/webpack';
-import * as SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import * as ManifestPlugin from 'webpack-manifest-plugin';
 import * as merge from 'webpack-merge';
@@ -13,11 +11,9 @@ import Service, { IArgs } from '../../Service';
 import paths from '../paths';
 import baseConfig from './base';
 
+const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
-const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
-const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
@@ -61,9 +57,9 @@ export default (service: Service, args: IArgs) => {
       noInfo: true,
       contentBase: paths.appBuildSrc,
       publicPath: ssr ? '/.reslow' : '/',
-      before(app: any, server: any) {
+      before(app: any, _server: any) {
         // app.use(evalSourceMapMiddleware(server));
-        // app.use(errorOverlayMiddleware());
+        app.use(errorOverlayMiddleware());
         // app.use(noopServiceWorkerMiddleware());
       },
     },
